@@ -1,0 +1,69 @@
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Navlinks from "./components/Navigation/navlinks";
+import Home from "./components/Home/index";
+import CustomerSign from "./components/CustomerSign/CustomerSign";
+import AdminSign from "./components/AdminSign/AdminSign";
+import CustomerLogin from "./components/CustomerLogin/CustomerLogin";
+import AdminLogin from "./components/AdminLogin/AdminLogin";
+import DashBoard from "./components/Dashboard/dashboard";
+import PrivateAdminRoute from "./components/utils/privateAdminRoute";
+import CreateProduct from "./components/Products/CreateProduct";
+import UpdateProduct from "./components/Products/UpdateProduct";
+import CreateCategory from "./components/Category/CreateCategory";
+
+const App = () => {
+  return (
+    <div className="App">
+      <Router>
+        <div className="navbar">
+          <button className="main-nav-menu-button">
+            <span />
+            <span />
+            <span />
+          </button>
+          <nav>
+            <Navlinks />
+          </nav>
+        </div>
+        <Switch>
+          <>
+            <Route path="/" exact>
+              <Home />
+            </Route>
+            <Route path="/customer-register" exact>
+              <CustomerSign />
+            </Route>
+            <PrivateAdminRoute path="/admin-register" exact>
+              <AdminSign />
+            </PrivateAdminRoute>
+            <Route path="/login-customer" exact>
+              <CustomerLogin />
+            </Route>
+            <Route path="/login-admin" exact>
+              <AdminLogin />
+            </Route>
+
+            <PrivateAdminRoute path="/dashboard" exact>
+              <DashBoard />
+            </PrivateAdminRoute>
+
+            <Route path="/dashboard/create_p" exact>
+              <CreateProduct />
+            </Route>
+
+            <Route path="/dashboard/update_p" exact>
+              <UpdateProduct />
+            </Route>
+
+            <Route path="/dashboard/createupdate_c" exact>
+              <CreateCategory />
+            </Route>
+          </>
+        </Switch>
+      </Router>
+    </div>
+  );
+};
+
+export default App;

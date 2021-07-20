@@ -1,0 +1,40 @@
+.main_content {
+  display: flex;
+  justify-content: flex-start;
+  padding: 4%;
+  background: rgb(55, 68, 29);
+  color: wheat;
+}
+
+li.menu_bullet_one {
+  list-style: none;
+  background: rgb(43, 53, 25);
+  margin-top: 26%;
+  padding: 2%;
+  color: wheat;
+}
+
+li.menu_bullet_one a {
+  color: wheat;
+  text-decoration: none;
+}
+ul.menu_bullet {
+  background: turquoise;
+  padding: 3%;
+}
+
+.flex_item_content {
+  padding: 3%;
+}
+
+.flex_item_footer {
+  background: black;
+  color: wheat;
+  height: 30vh;
+}
+
+.main_content_two {
+  margin-top: 5%;
+  background: rgb(18, 53, 49);
+  color: white;
+}
