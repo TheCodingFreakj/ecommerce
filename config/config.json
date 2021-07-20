@@ -1,0 +1,20 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": null,
+    "database": "ecommerce_fashion",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+
+  "production": {
+    "username": "",
+    "password": "",
+    "database": "",
+    "host": "",
+    "Port":"",
+    "use_env_variable":"",
+    "dialect": ""
+  
+  }
+}

@@ -1,0 +1,68 @@
+"use strict";
+
+const fs = require("fs");
+const path = require("path");
+const Sequelize = require("sequelize");
+const basename = path.basename(__filename);
+const env = process.env.NODE_ENV || "development";
+const config = require(__dirname + "/../config/config.json")[env];
+console.log(config);
+const db = {};
+
+let sequelize;
+if (env === "production") {
+  sequelize = new Sequelize(config.database, config.username, config.password, {
+    host: config.host,
+    protocol: "postgres",
+    dialect: config.dialect,
+    port: 5432,
+    logging: true,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  });
+  sequelize
+    .authenticate()
+    .then(() => {
+      console.log("Connection has been established successfully.");
+    })
+    .catch((err) => {
+      console.error("Unable to connect to the database:", err);
+    });
+} else {
+  sequelize = new Sequelize(config.database, config.username, config.password, {
+    host: config.host,
+    dialect: config.dialect,
+  });
+
+  sequelize
+    .authenticate()
+    .then(() => {
+      console.log("Connection has been established successfully.");
+    })
+    .catch((err) => {
+      console.error("Unable to connect to the database:", err);
+    });
+}
+
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+db.Users = require("./user")(sequelize, Sequelize);
+db.Categories = require("./category")(sequelize, Sequelize);
+db.Products = require("./product")(sequelize, Sequelize);
+
+db.Products.belongsToMany(db.Categories, {
+  through: "Category_Product",
+  as: "categories",
+  foreignKey: "prod_id",
+});
+
+db.Categories.belongsToMany(db.Products, {
+  through: "Category_Product",
+  as: "products",
+  foreignKey: "cat_id",
+});
+module.exports = db;
