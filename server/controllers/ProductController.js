@@ -6,7 +6,6 @@ module.exports = class ProductController {
     try {
       if (
         req.body.name === "" ||
-        req.body.desc === "" ||
         req.body.quant === "" ||
         req.body.desc === "" ||
         req.body.price === "" ||
