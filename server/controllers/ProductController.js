@@ -47,14 +47,14 @@ module.exports = class ProductController {
         shipping: createdProduct.shipping,
       });
 
-      const cate = await db.Categories.findByPk(category);
+      const cate = await db.Categories.findByPk(req.body.category);
       if (!cate) {
         return res.status(400);
       }
 
       const po = {
         blog_id: newProducts.prod_id,
-        cat_id: cate,
+        cat_id: cate.cat_id,
       };
 
       const saveCatgoryBlog = await db.Category_Blogs.create(

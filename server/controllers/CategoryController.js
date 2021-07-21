@@ -1,17 +1,21 @@
+const db = require("../../models/index");
+const slugify = require("slugify");
 module.exports = class CategoryController {
   static async create(req, res, next) {
+    console.log(req.body);
     try {
-      if (!req.body.cat_name) {
+      if (!req.body) {
         return res.status(200).send({
           message: "provide full details",
         });
       }
 
-      const newCate = await db.Categories.create(newCatg).then(function (cat) {
-        console.log("task", cat);
-        return cat;
+      const newCate = await db.Categories.create({
+        name: req.body.cat_name,
+        slug: slugify(req.body.cat_name).toLowerCase(),
+        cat_id: Math.floor(Math.random() * 20),
       });
-
+      console.log(newCate);
       return res.status(200).send({
         message: "new category added ",
       });

@@ -3,12 +3,14 @@ import "../styles.css";
 import { Redirect, useHistory, useLocation } from "react-router-dom";
 import { loginCustomer } from "../../store/customer";
 import { useSelector, useDispatch } from "react-redux";
+
+import { customerSelector } from "../../store/customer";
 import { unwrapResult } from "@reduxjs/toolkit";
 import DashBoardFooter from "../Dashboard/DashBoardFooter";
 const CustomerLogin = () => {
   const logindispatch = useDispatch();
   const [error, seterror] = React.useState();
-
+  console.log(useSelector(customerSelector));
   const [logindata, setlogindata] = React.useState({
     email: "",
     password: "",
@@ -27,10 +29,10 @@ const CustomerLogin = () => {
     try {
       const awl = await logindispatch(loginCustomer(logindata));
       const originalPromiseResult = unwrapResult(awl);
-      // console.log(originalPromiseResult);
+      console.log(originalPromiseResult);
 
       let { from } = location.state || {
-        from: { pathname: "/dashboard" },
+        from: { pathname: "/customerdashboard" },
       };
 
       history.replace(from);

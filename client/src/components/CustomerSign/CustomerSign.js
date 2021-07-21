@@ -29,6 +29,8 @@ const CustomerSign = () => {
     try {
       const awl2 = await registerdispatch(signupCustomer(formData));
       const originalPromiseResult2 = unwrapResult(awl2);
+
+      console.log(originalPromiseResult2);
       let { from } = location.state || {
         from: { pathname: "/dashboard" },
       };

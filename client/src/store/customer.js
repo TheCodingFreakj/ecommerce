@@ -42,6 +42,8 @@ export const loginCustomer = createAsyncThunk(
         },
       });
 
+      console.log(response);
+
       return response; // Return a value synchronously using Async-await
     } catch (err) {
       if (!err.response) {
@@ -55,9 +57,6 @@ export const loginCustomer = createAsyncThunk(
 export const customerSlice = createSlice({
   name: "customer",
   initialState: {
-    email: "",
-    password: "",
-    username: "",
     isFetching: false,
     isSuccess: false,
     isError: false,
@@ -92,27 +91,27 @@ export const customerSlice = createSlice({
       state.errorMessage = payload.data;
       return state;
     },
-  },
 
-  [loginCustomer.fulfilled]: (state, action) => {
-    // console.log("this is action", action);
-    state.isFetching = false;
-    state.isSuccess = true;
-    state.user = action.payload.data.user;
-    state.token = action.payload.data.token;
-    return state;
-  },
-  [loginCustomer.pending]: (state) => {
-    // console.log("this is payload", state);
-    state.isFetching = true;
-    return state;
-  },
-  [loginCustomer.rejected]: (state, { payload }) => {
-    //console.log("this is payload", payload);
-    state.isFetching = false;
-    state.isError = true;
-    state.errorMessage = payload.data;
-    return state;
+    [loginCustomer.fulfilled]: (state, action) => {
+      console.log("this is action", action);
+      state.isFetching = false;
+      state.isSuccess = true;
+      state.user = action.payload.data.user;
+      state.token = action.payload.data.token;
+      return state;
+    },
+    [loginCustomer.pending]: (state) => {
+      console.log("this is payload", state);
+      state.isFetching = true;
+      return state;
+    },
+    [loginCustomer.rejected]: (state, { payload }) => {
+      console.log("this is payload", payload);
+      state.isFetching = false;
+      state.isError = true;
+      state.errorMessage = payload.data;
+      return state;
+    },
   },
 });
 

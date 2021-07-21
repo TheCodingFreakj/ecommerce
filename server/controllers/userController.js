@@ -185,7 +185,6 @@ module.exports = class UserController {
           updateUser: updateUser,
         });
       }
-      return util.send(res);
     } catch (error) {
       console.error(error);
       return res
@@ -211,7 +210,6 @@ module.exports = class UserController {
           message: `Cannot find user with the id ${req.user.id}`,
         });
       }
-      return util.send(res);
     } catch (error) {
       console.error(error);
       return res

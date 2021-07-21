@@ -10,5 +10,5 @@ router.post("/login", UserController.loginuser); //if not token then cant login
 router.get("/login_protected", tokenAuth, UserController.protecteduser);
 router.put("/update_user/:id", tokenAuth, UserController.updatedUser);
 router.delete("/delete_user/:id", tokenAuth, UserController.deleteUser);
-router.post("/logout", tokenAuth, UserController.loginout);
+router.post("/logout", UserController.loginout);
 module.exports = router;
