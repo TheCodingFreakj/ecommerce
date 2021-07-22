@@ -3,16 +3,19 @@ import axios from "axios";
 
 export const addcategory = createAsyncThunk(
   "category/addcategory",
-  async ({ cat_name, token }, { dispatch, rejectWithValue }) => {
-    console.log(token);
+  async ({ cat_name, stateadmin }, { dispatch, rejectWithValue }) => {
     try {
+      console.log(stateadmin);
+
       const response = axios({
         method: "post",
-        url: `http://localhost:8080/api/v1/create`,
-        cat_name,
+        url: `http://localhost:8080/api/v1/createcat`,
+        data: {
+          category: cat_name,
+        },
         headers: {
           contentType: "application/json",
-          authorization: ` Bearer ${token}`,
+          authorization: ` Bearer ${stateadmin}`,
         },
       });
 
@@ -26,13 +29,37 @@ export const addcategory = createAsyncThunk(
   }
 );
 
-export const deletecategory = createAsyncThunk(
-  "category/deletecategory",
-  async ({ cat_id }, { dispatch, rejectWithValue }) => {
+export const showcategories = createAsyncThunk(
+  "category/showcategories",
+  async ({ dispatch, rejectWithValue }) => {
     try {
       const response = axios({
-        method: "post",
-        url: `http://localhost:8080/api/v1/delete/:cat_id`,
+        method: "get",
+        url: `http://localhost:8080/api/v1/fetchAll`,
+      });
+
+      console.log(response);
+      return response; // Return a value synchronously using Async-await
+    } catch (err) {
+      if (!err.response) {
+        throw err;
+      }
+      return rejectWithValue(err.response);
+    }
+  }
+);
+export const deletecategory = createAsyncThunk(
+  "category/deletecategory",
+  async ({ cat_id, stateadmin }, { dispatch, rejectWithValue }) => {
+    console.log(cat_id);
+    try {
+      const response = axios({
+        method: "delete",
+        url: `http://localhost:8080/api/v1/delete/${cat_id}`,
+        headers: {
+          contentType: "application/json",
+          authorization: ` Bearer ${stateadmin}`,
+        },
       });
 
       return response; // Return a value synchronously using Async-await
@@ -60,7 +87,7 @@ export const categorySlice = createSlice({
 
   extraReducers: {
     [addcategory.fulfilled]: (state, action) => {
-      //console.log("this is action", action);
+      console.log("this is action", action);
       state.isFetching = false;
       state.isSuccess = true;
       state.message = action.payload.data.message;
@@ -73,10 +100,29 @@ export const categorySlice = createSlice({
       return state;
     },
     [addcategory.rejected]: (state, { payload }) => {
-      // console.log("this is payload", payload);
+      console.log("this is payload", payload);
       state.isFetching = false;
       state.isError = true;
-      state.errorMessage = payload.data;
+      state.errorMessage = payload.data.message;
+      return state;
+    },
+
+    [showcategories.fulfilled]: (state, action) => {
+      console.log("this is action", action);
+      // state.isFetching = false;
+      // state.isSuccess = true;
+      // state.message = action.payload.data.message;
+      return state;
+    },
+    [showcategories.pending]: (state) => {
+      state.isFetching = true;
+      return state;
+    },
+    [showcategories.rejected]: (state, { payload }) => {
+      console.log("this is payload", payload);
+      // state.isFetching = false;
+      // state.isError = true;
+      // state.errorMessage = payload.data;
       return state;
     },
 

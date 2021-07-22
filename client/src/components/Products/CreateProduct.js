@@ -1,18 +1,41 @@
 import React from "react";
 import "../styles.css";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import DashBoardFooter from "../Dashboard/DashBoardFooter";
+import { addproduct } from "../../store/product";
+import { adminSelector } from "../../store/admin";
+import { unwrapResult } from "@reduxjs/toolkit";
 const CreateProduct = () => {
+  const productdispatch = useDispatch();
+
+  const stateadmin = useSelector(adminSelector).token;
   const [formData, setformData] = React.useState({
     name: "",
     desc: "",
     quant: "",
     price: "",
-    shipping: "",
     photo: "",
-    category: [],
   });
   const [file, setfile] = React.useState();
   const [previewfilesrc, setpreviewfilesrc] = React.useState();
+  const [cat_name, setcat_name] = React.useState("");
+  const [cate, setcate] = React.useState("");
+  const [shipping, setshipping] = React.useState("");
+  const [error, seterror] = React.useState();
+  const [message, setmessage] = React.useState();
+  React.useEffect(() => {
+    const showall = async () => {
+      const response = axios({
+        method: "get",
+        url: `http://localhost:8080/api/v1/fetchAll`,
+      }).then((data) => {
+        setcat_name(data.data.allcats);
+      });
+    };
+
+    showall();
+  }, []);
   const handlechange = (e) => {
     setformData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -20,7 +43,7 @@ const CreateProduct = () => {
     const file = event.target.files[0];
     // setfile(event.target.files[0]);
 
-    previewfile(file);
+    setfile(file);
   };
 
   const previewfile = (file) => {
@@ -30,12 +53,49 @@ const CreateProduct = () => {
       setpreviewfilesrc(reader.result);
     };
   };
-  const handleSubmit = (e) => {
+
+  const handlecategories = (e) => {
+    console.log(e.target);
+    console.log(e.target.value);
+    setcate(e.target.value);
+  };
+
+  const handleshipping = (e) => {
+    console.log(e.target.value);
+    setshipping(e.target.value);
+  };
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const data = new FormData();
+    data.append("photo", file);
+    data.append("name", formData.name);
+    data.append("quant", formData.quant);
+    data.append("desc", formData.desc);
+    data.append("price", formData.price);
+    data.append("shipping", shipping);
+    data.append("category", cate);
+    // console.log(data.get("photo"));
+    // console.log(data.get("name"));
+    // console.log(data.get("quant"));
+    // console.log(data.get("desc"));
+    // console.log(data.get("price"));
+    // console.log(data.get("shipping"));
+    // console.log(data.get("category"));
+
+    try {
+      const awlp = await productdispatch(addproduct({ data, stateadmin }));
+      const originalPromiseResultp = unwrapResult(awlp);
+      console.log(originalPromiseResultp);
+      setmessage(originalPromiseResultp.data.message);
+    } catch (rejectedValueOrSerializedError) {
+      // handle error here
+      console.log(rejectedValueOrSerializedError);
+      seterror(rejectedValueOrSerializedError.message);
+    }
   };
   return (
     <div className="main_content_two">
-      {" "}
       <form className="form_product" onSubmit={handleSubmit}>
         <input
           type="file"
@@ -90,14 +150,39 @@ const CreateProduct = () => {
           required
           onChange={handlechange}
         ></input>
+        <select id="product_input" name="catagory" onChange={handlecategories}>
+          <option id="product_input_val">choose</option>
+          {cat_name
+            ? cat_name.map((cata) => {
+                return (
+                  <>
+                    <option
+                      id="product_input_val"
+                      key={cata.cat_id}
+                      value={cata.name}
+                    >
+                      {cata.name}
+                    </option>
+                  </>
+                );
+              })
+            : null}
+        </select>
 
-        <select id="product_input" name="category">
-          <option id="product_input_val" value="volvo">
-            Volvo
+        <select id="product_input" name="shipping" onChange={handleshipping}>
+          <option id="product_input_val">choose</option>
+          <option id="product_input_val" value="true">
+            yes
+          </option>
+
+          <option id="product_input_val" value="false">
+            no
           </option>
         </select>
 
         <input type="submit" className="btn btn-primary" value="Add" />
+        {error ? <h1>{error}</h1> : null}
+        {message ? <h1>{message}</h1> : null}
       </form>
       <DashBoardFooter />
     </div>

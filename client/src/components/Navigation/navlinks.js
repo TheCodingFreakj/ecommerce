@@ -9,8 +9,8 @@ const Navlinks = () => {
   let stateadmin = useSelector(adminSelector).token;
   let stateadminuser = useSelector(adminSelector).user;
   let statecustomer = useSelector(customerSelector).token;
-  // console.log(statecustomer);
-  // console.log(stateadminuser);
+  //console.log(stateadmin);
+  //console.log(stateadminuser);
   let history = useHistory();
   let location = useLocation();
 
@@ -46,12 +46,16 @@ const Navlinks = () => {
         <NavLink to="/products" exact>
           Products
         </NavLink>
-        {stateadmin.token ? (
+        {stateadmin ? (
           <NavLink to="/admin-register">register Admin</NavLink>
         ) : null}
         <NavLink to="/login-admin"> Admin Login</NavLink>
-        <button onClick={logoutadmin}>signout admin</button>
-        <button onClick={logout}>signout customer</button>
+        {stateadmin ? (
+          <button onClick={logoutadmin}>signout admin</button>
+        ) : null}
+        {statecustomer ? (
+          <button onClick={logout}>signout customer</button>
+        ) : null}
       </li>
     </ul>
   );

@@ -6,6 +6,7 @@ const router = express.Router();
 // buses Routes
 
 router.post("/createProduct", tokenAuth, ProductController.create);
+router.get("/getallp", ProductController.getallproducts);
 router.post("/viewproduct/:prod_id", tokenAuth, ProductController.viewproduct);
 router.put("/update/:prod_id", tokenAuth, ProductController.update); //if not token then cant login
 router.delete("/delete/:prod_id", tokenAuth, ProductController.delete);

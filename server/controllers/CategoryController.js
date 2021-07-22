@@ -1,18 +1,19 @@
 const db = require("../../models/index");
 const slugify = require("slugify");
 module.exports = class CategoryController {
-  static async create(req, res, next) {
-    console.log(req.body);
+  static async createcat(req, res, next) {
+    console.log(req.body.category);
     try {
-      if (!req.body) {
+      if (!req.body.category) {
         return res.status(200).send({
           message: "provide full details",
         });
       }
 
       const newCate = await db.Categories.create({
-        name: req.body.cat_name,
-        slug: slugify(req.body.cat_name).toLowerCase(),
+        id: Math.floor(Math.random() * 20),
+        name: req.body.category,
+        slug: slugify(req.body.category).toLowerCase(),
         cat_id: Math.floor(Math.random() * 20),
       });
       console.log(newCate);
@@ -51,12 +52,12 @@ module.exports = class CategoryController {
   static async delete(req, res, next) {
     try {
       const catToDelete = await db.Categories.findOne({
-        where: { id: Number(id) },
+        where: { cat_id: Number(req.params.cat_id) },
       });
 
       if (catToDelete) {
         const deletedcat = await db.Categories.destroy({
-          where: { cat_id: Number(cat_id) },
+          where: { cat_id: Number(req.params.cat_id) },
         });
       }
 

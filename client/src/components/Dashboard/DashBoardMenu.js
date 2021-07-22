@@ -14,6 +14,9 @@ const DashBoardMenu = () => {
           </li>
 
           <li className="menu_bullet_one">
+            <NavLink to="/dashboard/show_p">Show Products</NavLink>
+          </li>
+          <li className="menu_bullet_one">
             <NavLink to="/dashboard/createupdate_c">Create category</NavLink>
           </li>
         </ul>

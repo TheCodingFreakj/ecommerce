@@ -11,12 +11,9 @@ import PrivateAdminRoute from "./components/utils/privateAdminRoute";
 import CreateProduct from "./components/Products/CreateProduct";
 import UpdateProduct from "./components/Products/UpdateProduct";
 import CreateCategory from "./components/Category/CreateCategory";
-import { adminSelector } from "./store/admin";
-import { useSelector } from "react-redux";
-const App = () => {
-  const { token } = useSelector(adminSelector);
-  console.log(useSelector(adminSelector).message);
+import ShowProducts from "./components/Products/ShowProducts";
 
+const App = () => {
   return (
     <div className="App">
       <Router>
@@ -49,25 +46,27 @@ const App = () => {
             </Route>
 
             <PrivateAdminRoute
-              path="/DashBoard"
+              path="/dashboard"
               component={DashBoard}
               exact
             ></PrivateAdminRoute>
-            {/* <PrivateAdminRoute path="/dashboard" exact>
-              <DashBoard />
-            </PrivateAdminRoute> */}
 
-            <Route path="/dashboard/create_p" exact>
-              <CreateProduct />
+            <PrivateAdminRoute
+              path="/dashboard/create_p"
+              component={CreateProduct}
+              exact
+            ></PrivateAdminRoute>
+            <Route path="/dashboard/show_p" exact>
+              <ShowProducts />
             </Route>
-
-            <Route path="/dashboard/update_p" exact>
+            <Route path="/dashboard/update_p/:prod_id" exact>
               <UpdateProduct />
             </Route>
-
-            <Route path="/dashboard/createupdate_c" exact>
-              <CreateCategory />
-            </Route>
+            <PrivateAdminRoute
+              path="/dashboard/createupdate_c"
+              component={CreateCategory}
+              exact
+            ></PrivateAdminRoute>
           </>
         </Switch>
       </Router>

@@ -71,7 +71,7 @@ export const adminSlice = createSlice({
 
   extraReducers: {
     [signupAdmin.fulfilled]: (state, action) => {
-      console.log("this is action", action);
+      //console.log("this is action", action);
       state.isFetching = false;
       state.isSuccess = true;
       state.message = action.payload.data.message;
@@ -85,7 +85,7 @@ export const adminSlice = createSlice({
       return state;
     },
     [signupAdmin.rejected]: (state, { payload }) => {
-      console.log("this is payload", payload);
+      //console.log("this is payload", payload);
       state.isFetching = false;
       state.isError = true;
       state.errorMessage = payload.data;
@@ -93,7 +93,7 @@ export const adminSlice = createSlice({
     },
 
     [loginAdmin.fulfilled]: (state, action) => {
-      console.log("this is action", action);
+      // console.log("this is action", action);
       state.isFetching = false;
       state.isSuccess = true;
       state.message = action.payload.data.message;
@@ -107,7 +107,7 @@ export const adminSlice = createSlice({
       return state;
     },
     [loginAdmin.rejected]: (state, { payload }) => {
-      console.log("this is payload", payload);
+      //console.log("this is payload", payload);
       state.isFetching = false;
       state.isError = true;
       state.errorMessage = payload.data;

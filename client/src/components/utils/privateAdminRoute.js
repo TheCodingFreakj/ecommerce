@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { adminSelector } from "../../store/admin";
 const PrivateAdminRoute = ({ component: Component, ...rest }) => {
   let stateadmin = useSelector(adminSelector).token;
-  console.log(stateadmin);
+  //console.log(stateadmin);
 
   return (
     <Route

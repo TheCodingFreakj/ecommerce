@@ -1,0 +1,32 @@
+.paginationBtns {
+    width: 80%;
+    height: 40px;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+  }
+
+  .paginationBtns a {
+    padding: 10px;
+    margin: 8px;
+    border-radius: 5px;
+    border: 1px solid #183319;
+    color: #b1fcb4;
+    cursor: pointer;
+  }
+
+  .paginationBtns a:hover {
+    color: #b1fcb4;
+    background: rgb(66, 66, 22);
+  }
+
+  .paginationactibe a {
+    background: #04aa6d;
+    color: #b1fcb4;
+  }
+
+  ul.paginationBtns {
+    margin-top: 3rem;
+    position: relative;
+    left: -20%;
+  }
