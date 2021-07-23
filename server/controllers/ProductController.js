@@ -1,5 +1,6 @@
 const { cloudinary } = require("../cloudinary");
 const db = require("../../models/index");
+
 module.exports = class ProductController {
   static async create(req, res, next) {
     try {
@@ -43,29 +44,20 @@ module.exports = class ProductController {
             shipping: createdProduct.shipping,
           });
 
-          console.log(newProducts);
-
           const cate = await db.Categories.findOne({
-            where: { name: req.body.category },
+            where: { cat_id: Number(req.body.category) },
           });
           if (!cate) {
             return res.status(400);
           }
 
-          const po = {
-            prod_id: newProducts.prod_id,
-            cat_id: cate.cat_id,
-          };
-
-          // Create and save a productOrder
-          const saveCatgoryBlog = await db.Category_Products.create(
-            po,
-            { w: 1 },
-            { returning: true }
-          );
+          await newProducts.addCategory(cate, {
+            through: { selfGranted: false },
+          });
 
           return res.status(200).send({
             message: "product created",
+            newProducts: newProducts,
           });
         }
       );
@@ -97,9 +89,41 @@ module.exports = class ProductController {
         .send("the request done is falsy..try again with right credentials");
     }
   }
-  //https://sequelize.org/master/manual/advanced-many-to-many.html
+
   static async update(req, res, next) {
+    console.log(req.body);
     try {
+      const file = req.files.photo;
+
+      const uploadres = await cloudinary.uploader.upload(
+        file.tempFilePath,
+        async (err, result) => {
+          const product = await db.Products.findOne({
+            where: { prod_id: req.params.prod_id },
+          });
+          product.photo = result.url;
+
+          //     // Remove all current associations
+          const categories2 = await product.getCategories();
+
+          product.removeCategories(categories2);
+
+          const cate = await db.Categories.findOne({
+            where: { cat_id: Number(req.body.category) },
+          });
+          await product.addCategory(cate, {
+            through: { selfGranted: false },
+          });
+
+          await db.Products.update(req.body, {
+            where: { prod_id: req.params.prod_id },
+          });
+
+          return res.status(200).send({
+            message: "product ipdated",
+          });
+        }
+      );
     } catch (error) {
       console.error(error);
       return res
@@ -108,8 +132,25 @@ module.exports = class ProductController {
     }
   }
 
-  static async delete(req, res, next) {
+  static async deletepro(req, res, next) {
     try {
+      // Get the order from the database
+      const product = await db.Products.findByPk(req.params.id);
+
+      // Find and remove all associations
+      const categories = await product.getCategories();
+      product.removeCategories(categories);
+
+      // Delete order
+      const producttodelete = await db.Products.destroy({
+        where: {
+          id: req.params.id,
+        },
+      });
+
+      return res.status(200).send({
+        message: "produts deleted ",
+      });
     } catch (error) {
       console.error(error);
       return res
@@ -119,7 +160,19 @@ module.exports = class ProductController {
   }
 
   static async viewproduct(req, res, next) {
+    console.log(typeof parseInt(req.params.prod_id));
     try {
+      const theProd = await db.Products.findOne({
+        where: { prod_id: parseInt(req.params.prod_id) },
+        include: db.Categories,
+      });
+
+      console.log(theProd);
+
+      return res.status(200).send({
+        message: "produts retrieved ",
+        theProd: theProd,
+      });
     } catch (error) {
       console.error(error);
       return res
@@ -189,16 +242,6 @@ module.exports = class ProductController {
   }
 
   static async relatedproduct(req, res, next) {
-    try {
-    } catch (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .send("the request done is falsy..try again with right credentials");
-    }
-  }
-
-  static async delete(req, res, next) {
     try {
     } catch (error) {
       console.error(error);

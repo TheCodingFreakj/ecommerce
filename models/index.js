@@ -55,14 +55,8 @@ db.Categories = require("./category")(sequelize, Sequelize);
 db.Products = require("./product")(sequelize, Sequelize);
 db.Category_Products = require("./Category_Product")(sequelize, Sequelize);
 
-db.Products.belongsToMany(db.Categories, {
-  as: "Categories",
-  through: { model: db.Category_Products, unique: false },
-  foreignKey: "cat_id",
-});
-db.Categories.belongsToMany(db.Products, {
-  as: "Products",
-  through: { model: db.Category_Products, unique: false },
-  foreignKey: "prod_id",
-});
+
+db.Products.belongsToMany(db.Categories, { through: db.Category_Products });
+db.Categories.belongsToMany(db.Products, { through: db.Category_Products });
+
 module.exports = db;

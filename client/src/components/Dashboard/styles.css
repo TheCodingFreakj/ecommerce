@@ -4,6 +4,7 @@
   padding: 4%;
   background: rgb(55, 68, 29);
   color: wheat;
+  overflow-x: hidden;
 }
 
 li.menu_bullet_one {
@@ -18,11 +19,13 @@ li.menu_bullet_one a {
   color: wheat;
   text-decoration: none;
 }
-ul.menu_bullet {
-  background: turquoise;
-  padding: 3%;
-}
 
+ul.menu_bullet {
+  background: rgb(42, 77, 73);
+  padding: 3%;
+  width: 6rem;
+  height: 30rem;
+}
 .flex_item_content {
   padding: 3%;
 }
@@ -37,4 +40,43 @@ ul.menu_bullet {
   margin-top: 5%;
   background: rgb(18, 53, 49);
   color: white;
+}
+
+nav.sc-gtsrHT.navbar.fixed-top.nav-secondary.is-dark.is-light-text {
+  display: flex;
+  width: 70rem;
+  margin-top: -5%;
+  justify-content: space-between;
+  background: tomato;
+}
+
+.flex_item_content-1 {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.sc-bdnxRM.col-lg-3.col-sm-6.is-light-text.mb-4 {
+  background: rgb(44, 33, 31);
+  padding: 4%;
+  color: #fff;
+  margin-top: 3%;
+  height: 7vh;
+}
+
+.sc-bdnxRM.col-md-4.col-lg-3.is-light-text.mb-4 {
+  background: rgb(44, 33, 31);
+  padding: 4%;
+  margin-top: 3%;
+  height: 7vh;
+}
+
+.sc-bdnxRM.row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4%;
+}
+
+.flex_item_content-3 {
+  display: flex;
+  justify-content: space-between;
 }

@@ -59,9 +59,13 @@ const App = () => {
             <Route path="/dashboard/show_p" exact>
               <ShowProducts />
             </Route>
-            <Route path="/dashboard/update_p/:prod_id" exact>
-              <UpdateProduct />
-            </Route>
+
+            <PrivateAdminRoute
+              path="/dashboard/update_p/:prod_id"
+              component={UpdateProduct}
+              exact
+            ></PrivateAdminRoute>
+
             <PrivateAdminRoute
               path="/dashboard/createupdate_c"
               component={CreateCategory}

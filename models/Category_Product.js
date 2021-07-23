@@ -14,8 +14,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   Category_Product.init(
     {
-      prod_id: DataTypes.STRING,
-      cat_id: DataTypes.STRING,
+      selfGranted: DataTypes.BOOLEAN,
+      // prod_id: DataTypes.INTEGER,
+      // cat_id: DataTypes.INTEGER,
     },
     {
       sequelize,

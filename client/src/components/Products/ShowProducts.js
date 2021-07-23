@@ -3,10 +3,17 @@ import axios from "axios";
 import "./product.css";
 import { NavLink } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+import { adminSelector } from "../../store/admin";
+import { useDispatch, useSelector } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { deleteproduct } from "../../store/product";
 const ShowProducts = () => {
+  const stateadmin = useSelector(adminSelector).token;
+  const productdeldispatch = useDispatch();
   const [pro, setpro] = React.useState("");
   const [pageNumber, setpageNumber] = React.useState(0);
-
+  const [error, seterror] = React.useState();
+  const [message, setmessage] = React.useState();
   const productperpage = 2;
   const productsdone = pageNumber * productperpage;
   const pageCount = pro ? Math.ceil(pro.length / productperpage) : null;
@@ -26,7 +33,19 @@ const ShowProducts = () => {
     showall();
   }, []);
 
-  const handleDelete = async (prod_id) => {};
+  const handleDelete = async (id) => {
+    // console.log(id);
+    try {
+      const viewd = await productdeldispatch(deleteproduct({ id, stateadmin }));
+      const result = unwrapResult(viewd);
+      // console.log(result);
+      setmessage(result.data.message);
+    } catch (rejectedValueOrSerializedError) {
+      // handle error here
+      console.log(rejectedValueOrSerializedError);
+      seterror(rejectedValueOrSerializedError.data);
+    }
+  };
 
   return (
     <>
@@ -47,7 +66,7 @@ const ShowProducts = () => {
                     </NavLink>
                     <button
                       className="button_delete"
-                      onClick={() => handleDelete(product.prod_id)}
+                      onClick={() => handleDelete(product.id)}
                     >
                       Delete
                     </button>
@@ -67,6 +86,9 @@ const ShowProducts = () => {
           disabledClassName={"paginationdisables"}
           activeClassName={"paginationactibe"}
         />
+
+        {error ? <h1>{error}</h1> : null}
+        {message ? <h1>{message}</h1> : null}
       </div>
     </>
   );

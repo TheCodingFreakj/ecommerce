@@ -6,6 +6,7 @@ import DashBoardFooter from "../Dashboard/DashBoardFooter";
 import { addproduct } from "../../store/product";
 import { adminSelector } from "../../store/admin";
 import { unwrapResult } from "@reduxjs/toolkit";
+
 const CreateProduct = () => {
   const productdispatch = useDispatch();
 
@@ -42,7 +43,6 @@ const CreateProduct = () => {
   const onFileChange = (event) => {
     const file = event.target.files[0];
     // setfile(event.target.files[0]);
-
     setfile(file);
   };
 
@@ -55,13 +55,10 @@ const CreateProduct = () => {
   };
 
   const handlecategories = (e) => {
-    console.log(e.target);
-    console.log(e.target.value);
     setcate(e.target.value);
   };
 
   const handleshipping = (e) => {
-    console.log(e.target.value);
     setshipping(e.target.value);
   };
   const handleSubmit = async (e) => {
@@ -86,7 +83,7 @@ const CreateProduct = () => {
     try {
       const awlp = await productdispatch(addproduct({ data, stateadmin }));
       const originalPromiseResultp = unwrapResult(awlp);
-      console.log(originalPromiseResultp);
+
       setmessage(originalPromiseResultp.data.message);
     } catch (rejectedValueOrSerializedError) {
       // handle error here
@@ -94,6 +91,7 @@ const CreateProduct = () => {
       seterror(rejectedValueOrSerializedError.message);
     }
   };
+
   return (
     <div className="main_content_two">
       <form className="form_product" onSubmit={handleSubmit}>
@@ -159,7 +157,7 @@ const CreateProduct = () => {
                     <option
                       id="product_input_val"
                       key={cata.cat_id}
-                      value={cata.name}
+                      value={cata.cat_id}
                     >
                       {cata.name}
                     </option>
