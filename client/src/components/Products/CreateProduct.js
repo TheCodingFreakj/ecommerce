@@ -17,6 +17,7 @@ const CreateProduct = () => {
     quant: "",
     price: "",
     photo: "",
+    sold: "",
   });
   const [file, setfile] = React.useState();
   const [previewfilesrc, setpreviewfilesrc] = React.useState();
@@ -72,13 +73,7 @@ const CreateProduct = () => {
     data.append("price", formData.price);
     data.append("shipping", shipping);
     data.append("category", cate);
-    // console.log(data.get("photo"));
-    // console.log(data.get("name"));
-    // console.log(data.get("quant"));
-    // console.log(data.get("desc"));
-    // console.log(data.get("price"));
-    // console.log(data.get("shipping"));
-    // console.log(data.get("category"));
+    data.append("sold", formData.sold);
 
     try {
       const awlp = await productdispatch(addproduct({ data, stateadmin }));
@@ -138,7 +133,15 @@ const CreateProduct = () => {
           required
           onChange={handlechange}
         ></input>
-
+        <input
+          type="number"
+          id="product_input"
+          name="sold"
+          placeholder="sold"
+          value={formData.sold || ""}
+          required
+          onChange={handlechange}
+        ></input>
         <input
           type="number"
           id="product_input"

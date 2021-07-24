@@ -1,5 +1,6 @@
 const { cloudinary } = require("../cloudinary");
 const db = require("../../models/index");
+const Op = require("sequelize");
 
 module.exports = class ProductController {
   static async create(req, res, next) {
@@ -11,6 +12,7 @@ module.exports = class ProductController {
         req.body.price === "" ||
         req.body.shipping === "" ||
         req.body.category === "" ||
+        req.body.sold === "" ||
         req.files === "undefined"
       ) {
         return res.status(400).send({
@@ -29,6 +31,7 @@ module.exports = class ProductController {
           createdProduct.desc = req.body.desc;
           createdProduct.quant = req.body.quant;
           createdProduct.price = req.body.price;
+          createdProduct.sold = req.body.sold;
           createdProduct.shipping = req.body.shipping;
 
           console.log(createdProduct);
@@ -41,6 +44,7 @@ module.exports = class ProductController {
             price: createdProduct.price,
             price: createdProduct.price,
             photo: createdProduct.photo,
+            sold: createdProduct.sold,
             shipping: createdProduct.shipping,
           });
 
@@ -181,8 +185,33 @@ module.exports = class ProductController {
     }
   }
 
-  static async productbyid(req, res, next) {
+  //getting the product in this price range
+  //ordered by sold
+
+  //best sellers
+  static async getProducts(req, res, next) {
+    let limit = req.query.limit ? parseInt(req.query.limit) : 3;
+    let page = req.query.page ? parseInt(req.query.page) : 1;
+    const offset = page ? page * limit : 0;
+
     try {
+      const lowerlimit = 455;
+      const upperlimit = 4553;
+
+      let limitget = ([Op.between] = [lowerlimit, upperlimit]);
+      const theProds = await db.Products.findAll({
+        where: {
+          sold: limitget,
+        },
+
+        order: [["sold", "desc"]],
+      });
+
+      const totalPages = Math.ceil(theProds.count / limit);
+      return res.status(200).send({
+        message: "produts retrieved ",
+        theProds: theProds,
+      });
     } catch (error) {
       console.error(error);
       return res
@@ -191,15 +220,7 @@ module.exports = class ProductController {
     }
   }
 
-  static async productbycat(req, res, next) {
-    try {
-    } catch (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .send("the request done is falsy..try again with right credentials");
-    }
-  }
+  //nre launched
 
   static async newarrivals(req, res, next) {
     try {
@@ -211,15 +232,7 @@ module.exports = class ProductController {
     }
   }
 
-  static async bestsellers(req, res, next) {
-    try {
-    } catch (error) {
-      console.error(error);
-      return res
-        .status(500)
-        .send("the request done is falsy..try again with right credentials");
-    }
-  }
+  //filter high low price item with high sells
 
   static async addtocart(req, res, next) {
     try {
@@ -251,3 +264,6 @@ module.exports = class ProductController {
     }
   }
 };
+
+//find all orders belinging to a customer
+//https://maximorlov.com/6-common-sequelize-queries-rewritten-in-sql/

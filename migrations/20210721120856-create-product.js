@@ -23,6 +23,9 @@ module.exports = {
       quant: {
         type: Sequelize.INTEGER
       },
+      sold: {
+        type: Sequelize.INTEGER
+      },
       price: {
         type: Sequelize.INTEGER
       },

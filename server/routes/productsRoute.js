@@ -10,10 +10,11 @@ router.get("/getallp", ProductController.getallproducts);
 router.post("/viewproduct/:prod_id", tokenAuth, ProductController.viewproduct);
 router.put("/update/:prod_id", tokenAuth, ProductController.update); //if not token then cant login
 router.delete("/deleteproduct/:id", tokenAuth, ProductController.deletepro);
-router.post("/getproductbyid", tokenAuth, ProductController.productbyid);
-router.post("/getproductbycat", tokenAuth, ProductController.productbycat);
-router.post("/newarrivals", tokenAuth, ProductController.newarrivals);
-router.post("/bestsellers", tokenAuth, ProductController.bestsellers);
+
+//product search
+router.get("/getproducts", tokenAuth, ProductController.getProducts);
+router.get("/newarrivals", tokenAuth, ProductController.newarrivals);
+
 router.post("/addtocart", tokenAuth, ProductController.addtocart);
 router.post("/productinstock", tokenAuth, ProductController.productinstock);
 router.post("/relatedproduct", tokenAuth, ProductController.relatedproduct);
