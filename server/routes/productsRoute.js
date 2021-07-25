@@ -12,8 +12,9 @@ router.put("/update/:prod_id", tokenAuth, ProductController.update); //if not to
 router.delete("/deleteproduct/:id", tokenAuth, ProductController.deletepro);
 
 //product search
-router.get("/getproducts", tokenAuth, ProductController.getProducts);
-router.get("/newarrivals", tokenAuth, ProductController.newarrivals);
+router.get("/getproducts", ProductController.getProducts);
+router.get("/newarrivals",  ProductController.newarrivals);
+router.post("/listBySearch", ProductController.listBySearch);
 
 router.post("/addtocart", tokenAuth, ProductController.addtocart);
 router.post("/productinstock", tokenAuth, ProductController.productinstock);

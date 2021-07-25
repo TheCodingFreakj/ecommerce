@@ -205,6 +205,7 @@ module.exports = class ProductController {
         },
 
         order: [["sold", "desc"]],
+        limit: limit,
       });
 
       const totalPages = Math.ceil(theProds.count / limit);
@@ -233,6 +234,67 @@ module.exports = class ProductController {
   }
 
   //filter high low price item with high sells
+
+  //send the categoruy and proce range feom frontend
+  static async listBySearch(req, res, next) {
+    try {
+      let limit = req.query.limit ? parseInt(req.query.limit) : 4;
+      let skip = parseInt(req.body.skip);
+
+      let findArgs = {};
+      let limitget = "";
+      for (const key in req.body.newFilters) {
+        if (key === "category") {
+          findArgs.category = req.body.newFilters[key];
+          const cat = findArgs.category;
+          limitget = [Op.in] = cat;
+        }
+
+        if (key === "price") {
+          findArgs.price = {
+            lowerlimit: req.body.newFilters[key][0],
+            upperlimit: req.body.newFilters[key][1],
+          };
+        }
+      }
+
+      const thecats = await db.Categories.findAll({
+        where: {
+          cat_id: limitget,
+        },
+        include: db.Products,
+      });
+
+      const thearray = [];
+
+      thearray.push(thecats);
+
+      let limitgetprice = [Op.contains] = [
+        findArgs.price.lowerlimit,
+        findArgs.price.upperlimit,
+      ];
+      const productarray = await db.Products.findAll({
+        where: {
+          price:limitgetprice
+        }
+      });
+
+      const productarraylist = [];
+
+      productarraylist.push(productarray);
+
+      return res.status(200).send({
+        message: "produts retrieved ",
+        thecats: thearray,
+        theproducts: productarraylist,
+      });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .send("the request done is falsy..try again with right credentials");
+    }
+  }
 
   static async addtocart(req, res, next) {
     try {
@@ -267,3 +329,40 @@ module.exports = class ProductController {
 
 //find all orders belinging to a customer
 //https://maximorlov.com/6-common-sequelize-queries-rewritten-in-sql/
+// console.log("this is semd frp, fromyemnd", req.body.newFilters[key]);
+// if (req.body.newFilters[key].length > 0) {
+//   if (key === "price") {
+//     findArgs = {
+//       lowerlimit: req.body.newFilters[key][0],
+//       upperlimit: req.body.newFilters[key][1],
+//     };
+//   }
+// } else {
+//   if (key === "category") {
+//     findArgs.category = req.body.newFilters[key];
+//   }
+// }
+
+// console.log(findArgs);
+
+// let limitget = ([Op.between] = [
+//   findArgs.lowerlimit,
+//   findArgs.upperlimit,
+// ]);
+
+// console.log(limitget);
+
+// const theProds = await db.Products.findAll({
+//   where: {
+//     price: limitget,
+//   },
+
+//   // order: [["sold", "desc"]],
+//   // limit: limit,
+// });
+
+// console.log(theProds);
+// return res.status(200).send({
+//   message: "produts retrieved ",
+//   theProds: theProds,
+// });

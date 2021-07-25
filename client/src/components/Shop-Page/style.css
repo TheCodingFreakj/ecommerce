@@ -1,0 +1,34 @@
+.product_content {
+  margin-top: 4%;
+}
+
+.list-unstyled {
+  list-style: none;
+}
+
+.product_content {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.right-side {
+  margin-left: 18%;
+  margin-top: 2%;
+  display: flex;
+  flex-wrap: wrap;
+}
+img.image {
+  height: 10rem;
+  width: 10rem;
+}
+
+.smallcard {
+  height: 20rem;
+}
+
+.left-side {
+  background: rgb(57, 63, 45);
+  color: aliceblue;
+  padding: 3%;
+  height: 100vh;
+}

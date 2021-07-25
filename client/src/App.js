@@ -12,6 +12,7 @@ import CreateProduct from "./components/Products/CreateProduct";
 import UpdateProduct from "./components/Products/UpdateProduct";
 import CreateCategory from "./components/Category/CreateCategory";
 import ShowProducts from "./components/Products/ShowProducts";
+import FilterProducts from "./components/Shop-Page/product";
 
 const App = () => {
   return (
@@ -43,6 +44,10 @@ const App = () => {
             </Route>
             <Route path="/login-admin" exact>
               <AdminLogin />
+            </Route>
+
+            <Route path="/products" exact>
+              <FilterProducts />
             </Route>
 
             <PrivateAdminRoute
