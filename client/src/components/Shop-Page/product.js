@@ -10,6 +10,8 @@ const FilterProducts = () => {
   const [pro, setpro] = React.useState("");
   const [limit, setlimit] = React.useState(3);
   const [skip, setskip] = React.useState(0);
+  const [page, setpage] = React.useState(0);
+  const [isloading, setisloading] = React.useState(false);
   const [filteredresults, setfilteredresults] = React.useState("");
   const [filteredresultsp, setfilteredresultsp] = React.useState("");
   const [myfilters, setmyfilters] = React.useState({
@@ -27,19 +29,21 @@ const FilterProducts = () => {
 
     showall();
 
-    const showallP = async () => {
-      const response = axios({
-        method: "get",
-        url: `http://localhost:8080/api/v1/getallp`,
-      }).then((data) => {
-        setpro(data.data.allp);
-      });
-    };
+    //https://www.freecodecamp.org/news/build-a-react-application-with-load-more-functionality-react-hooks/
 
     showallP();
   }, []);
 
-  console.log(pro);
+  const showallP = async () => {
+    setisloading(true);
+    const response = axios({
+      method: "get",
+      url: `http://localhost:8080/api/v1/getallp?page=${page}&result=4`,
+    }).then((data) => {
+      setpro(data.data.allp);
+      setisloading(false);
+    });
+  };
 
   const loadFilteredResults = async (skip, limit, newFilters) => {
     const response = await axios({
@@ -83,80 +87,94 @@ const FilterProducts = () => {
     return array;
   };
 
-  return (
-    <div className="product_content">
-      <div className="left-side">
-        <h4>Filter By Category</h4>
-        <ul>
-          <CheckBox
-            categories={cat}
-            handleFilters={(filters) => handleFilters(filters, "category")}
-          />
-        </ul>
+  const loadMore = () => {
+    setpage(page + 1);
+    showallP();
+  };
+  console.log(page);
 
-        <h4>Filter By Price</h4>
-        <div>
-          <RadioBox
-            prices={prices}
-            handleFilters={(filters) => handleFilters(filters, "price")}
-          />
+  return (
+    <>
+      <div className="product_content">
+        <div className="left-side">
+          <h4>Filter By Category</h4>
+          <ul>
+            <CheckBox
+              categories={cat}
+              handleFilters={(filters) => handleFilters(filters, "category")}
+            />
+          </ul>
+
+          <h4>Filter By Price</h4>
+          <div>
+            <RadioBox
+              prices={prices}
+              handleFilters={(filters) => handleFilters(filters, "price")}
+            />
+          </div>
         </div>
-      </div>
-      <div className="right-side">
-        <>
-          {filteredresults
-            ? filteredresults.map((f) => {
-                console.log(f);
-                return f.Products.map((c) => {
+        <div className="right-side">
+          <>
+            {filteredresults
+              ? filteredresults.map((f) => {
+                  console.log(f);
+                  return f.Products.map((c) => {
+                    return (
+                      <div className="smallcard">
+                        <img src={c.photo} className="image_card" />
+
+                        <div className="smallcard-inner">
+                          <h2>{c.name}</h2>
+                          <p>{c.desc}</p>
+                          <button>shop</button>
+                        </div>
+                      </div>
+                    );
+                  });
+                })
+              : null}
+
+            {filteredresultsp
+              ? filteredresultsp.map((fp) => {
                   return (
                     <div className="smallcard">
-                      <img src={c.photo} className="image_card" />
+                      <img src={fp.photo} className="image_card" />
 
                       <div className="smallcard-inner">
-                        <h2>{c.name}</h2>
-                        <p>{c.desc}</p>
+                        <h2>{fp.name}</h2>
+                        <p>{fp.desc}</p>
                         <button>shop</button>
                       </div>
                     </div>
                   );
-                });
-              })
-            : null}
+                })
+              : null}
 
-          {filteredresultsp
-            ? filteredresultsp.map((fp) => {
-                return (
-                  <div className="smallcard">
-                    <img src={fp.photo} className="image_card" />
+            {pro
+              ? pro.map((pp) => {
+                  return (
+                    <div className="smallcard">
+                      <img src={pp.photo} className="image_card" />
 
-                    <div className="smallcard-inner">
-                      <h2>{fp.name}</h2>
-                      <p>{fp.desc}</p>
-                      <button>shop</button>
+                      <div className="smallcard-inner">
+                        <h2>{pp.name}</h2>
+                        <p>{pp.desc}</p>
+                        <button>shop</button>
+                      </div>
                     </div>
-                  </div>
-                );
-              })
-            : null}
-
-          {pro
-            ? pro.map((pp) => {
-                return (
-                  <div className="smallcard">
-                    <img src={pp.photo} className="image_card" />
-
-                    <div className="smallcard-inner">
-                      <h2>{pp.name}</h2>
-                      <p>{pp.desc}</p>
-                      <button>shop</button>
-                    </div>
-                  </div>
-                );
-              })
-            : null}
-        </>
+                  );
+                })
+              : null}
+          </>
+        </div>
       </div>
-    </div>
+
+      <div className="load-more">
+        <button onClick={loadMore} className="btn-grad">
+          {isloading ? "Loading..." : "Load More"}
+        </button>
+      </div>
+    </>
   );
 };
 

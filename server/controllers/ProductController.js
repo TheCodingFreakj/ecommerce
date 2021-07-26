@@ -74,8 +74,15 @@ module.exports = class ProductController {
   }
 
   static async getallproducts(req, res, next) {
+    let limit = req.query.result ? parseInt(req.query.result) : 3;
+    let page = req.query.page ? parseInt(req.query.page) : 0;
+    const offset = page ? page * limit : 0;
     try {
-      const allp = await db.Products.findAll();
+      const allp = await db.Products.findAll({
+        order: [["sold", "desc"]],
+        limit: limit,
+        offset: offset,
+      });
       if (allp.length > 0) {
         return res.status(200).send({
           message: "produts retrieved ",
