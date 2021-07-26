@@ -30,7 +30,7 @@ const App = () => {
         </div>
         <Switch>
           <>
-            <Route path="/" exact>
+            <Route path="/home" exact>
               <Home />
             </Route>
             <Route path="/customer-register" exact>

@@ -84,6 +84,7 @@ module.exports = class ProductController {
       } else {
         return res.status(200).send({
           message: "No allcats found",
+          allp: allp,
         });
       }
     } catch (error) {
@@ -164,7 +165,6 @@ module.exports = class ProductController {
   }
 
   static async viewproduct(req, res, next) {
-    console.log(typeof parseInt(req.params.prod_id));
     try {
       const theProd = await db.Products.findOne({
         where: { prod_id: parseInt(req.params.prod_id) },
@@ -211,7 +211,7 @@ module.exports = class ProductController {
       const totalPages = Math.ceil(theProds.count / limit);
       return res.status(200).send({
         message: "produts retrieved ",
-        theProds: theProds,
+        bestsellers: theProds,
       });
     } catch (error) {
       console.error(error);
@@ -224,7 +224,17 @@ module.exports = class ProductController {
   //nre launched
 
   static async newarrivals(req, res, next) {
+    const limit = req.query.limit ? parseInt(req.query.limit) : 3;
     try {
+      const theProds = await db.Products.findAll({
+        order: [["createdAt", "desc"]],
+        limit: limit,
+      });
+
+      return res.status(200).send({
+        message: "produts retrieved ",
+        newarrivals: theProds,
+      });
     } catch (error) {
       console.error(error);
       return res
@@ -269,14 +279,14 @@ module.exports = class ProductController {
 
       thearray.push(thecats);
 
-      let limitgetprice = [Op.contains] = [
+      let limitgetprice = ([Op.contains] = [
         findArgs.price.lowerlimit,
         findArgs.price.upperlimit,
-      ];
+      ]);
       const productarray = await db.Products.findAll({
         where: {
-          price:limitgetprice
-        }
+          price: limitgetprice,
+        },
       });
 
       const productarraylist = [];

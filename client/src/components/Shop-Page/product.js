@@ -7,6 +7,7 @@ import { prices } from "./prices";
 
 const FilterProducts = () => {
   const [cat, setcat] = React.useState("");
+  const [pro, setpro] = React.useState("");
   const [limit, setlimit] = React.useState(3);
   const [skip, setskip] = React.useState(0);
   const [filteredresults, setfilteredresults] = React.useState("");
@@ -25,10 +26,22 @@ const FilterProducts = () => {
     };
 
     showall();
+
+    const showallP = async () => {
+      const response = axios({
+        method: "get",
+        url: `http://localhost:8080/api/v1/getallp`,
+      }).then((data) => {
+        setpro(data.data.allp);
+      });
+    };
+
+    showallP();
   }, []);
 
+  console.log(pro);
+
   const loadFilteredResults = async (skip, limit, newFilters) => {
-    setfilteredresults(filteredresults);
     const response = await axios({
       method: "post",
       url: `http://localhost:8080/api/v1/listBySearch`,
@@ -39,14 +52,11 @@ const FilterProducts = () => {
       },
     });
 
-    console.log(response);
     if (response.status === 200) {
       setfilteredresults(response.data.thecats[0]);
       setfilteredresultsp(response.data.theproducts[0]);
     }
   };
-
-  // console.log(filteredresults);
 
   const handleFilters = (filters, filterBy) => {
     const newfilters = { ...myfilters };
@@ -94,44 +104,56 @@ const FilterProducts = () => {
       </div>
       <div className="right-side">
         <>
-          {filteredresults ? (
-            filteredresults.map((f) => {
-              console.log(f);
-              return f.Products.map((c) => {
+          {filteredresults
+            ? filteredresults.map((f) => {
+                console.log(f);
+                return f.Products.map((c) => {
+                  return (
+                    <div className="smallcard">
+                      <img src={c.photo} className="image_card" />
+
+                      <div className="smallcard-inner">
+                        <h2>{c.name}</h2>
+                        <p>{c.desc}</p>
+                        <button>shop</button>
+                      </div>
+                    </div>
+                  );
+                });
+              })
+            : null}
+
+          {filteredresultsp
+            ? filteredresultsp.map((fp) => {
                 return (
                   <div className="smallcard">
-                    <img src={c.photo} className="image" />
+                    <img src={fp.photo} className="image_card" />
 
                     <div className="smallcard-inner">
-                      <h2>{c.name}</h2>
-                      <p>{c.desc}</p>
+                      <h2>{fp.name}</h2>
+                      <p>{fp.desc}</p>
                       <button>shop</button>
                     </div>
                   </div>
                 );
-              });
-            })
-          ) : (
-            <p>loading</p>
-          )}
+              })
+            : null}
 
-          {filteredresultsp ? (
-            filteredresultsp.map((fp) => {
-              return (
-                <div className="smallcard">
-                  <img src={fp.photo} className="image" />
+          {pro
+            ? pro.map((pp) => {
+                return (
+                  <div className="smallcard">
+                    <img src={pp.photo} className="image_card" />
 
-                  <div className="smallcard-inner">
-                    <h2>{fp.name}</h2>
-                    <p>{fp.desc}</p>
-                    <button>shop</button>
+                    <div className="smallcard-inner">
+                      <h2>{pp.name}</h2>
+                      <p>{pp.desc}</p>
+                      <button>shop</button>
+                    </div>
                   </div>
-                </div>
-              );
-            })
-          ) : (
-            <p>loading</p>
-          )}
+                );
+              })
+            : null}
         </>
       </div>
     </div>
