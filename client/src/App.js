@@ -13,6 +13,7 @@ import UpdateProduct from "./components/Products/UpdateProduct";
 import CreateCategory from "./components/Category/CreateCategory";
 import ShowProducts from "./components/Products/ShowProducts";
 import FilterProducts from "./components/Shop-Page/product";
+import SingleProduct from "./components/Shop-Page/single-product";
 
 const App = () => {
   return (
@@ -76,6 +77,10 @@ const App = () => {
               component={CreateCategory}
               exact
             ></PrivateAdminRoute>
+
+            <Route path="/products/:id" exact>
+              <SingleProduct />
+            </Route>
           </>
         </Switch>
       </Router>

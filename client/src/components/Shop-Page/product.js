@@ -4,7 +4,8 @@ import CheckBox from "./checkbox";
 import axios from "axios";
 import RadioBox from "./radiobox";
 import { prices } from "./prices";
-
+import { NavLink, Redirect } from "react-router-dom";
+import { addItem } from "./CartHelper/cart_helpers";
 const FilterProducts = () => {
   const [cat, setcat] = React.useState("");
   const [pro, setpro] = React.useState("");
@@ -17,6 +18,10 @@ const FilterProducts = () => {
   const [myfilters, setmyfilters] = React.useState({
     filters: { category: [], price: [] },
   });
+  const [cartitems, setcartitems] = React.useState({
+    cart: "",
+  });
+  const [redirect, setRedirect] = React.useState(false);
   React.useEffect(() => {
     const showall = async () => {
       const response = axios({
@@ -91,7 +96,36 @@ const FilterProducts = () => {
     setpage(page + 1);
     showallP();
   };
-  console.log(page);
+  // console.log("pro", pro);
+  // console.log("filteredresults", filteredresults);
+  // console.log("filteredresultsp", filteredresultsp);
+  const showStock = (quantity) => {
+    return quantity > 0 ? (
+      <span className="badge badge-primary badge-pill">In Stock </span>
+    ) : (
+      <span className="badge badge-primary badge-pill">Out of Stock </span>
+    );
+  };
+
+  const addtocart = (id) => {
+    let product = Object.assign({}, pro ? pro.find((p) => p.id == id) : null);
+    product.cartId = Date.now();
+
+    setcartitems((prevState) => {
+      return { cart: [...prevState.cart, product] };
+    });
+
+    let uniqueArray = cartitems.cart
+      ? cartitems.cart.filter(
+          (elem, index) =>
+            cartitems.cart.findIndex((obj) => obj.id === elem.id) === index
+        )
+      : null;
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cart", JSON.stringify(uniqueArray));
+    }
+  };
 
   return (
     <>
@@ -114,6 +148,7 @@ const FilterProducts = () => {
           </div>
         </div>
         <div className="right-side">
+          {/* {shouldRedirect(redirect)} */}
           <>
             {filteredresults
               ? filteredresults.map((f) => {
@@ -126,7 +161,25 @@ const FilterProducts = () => {
                         <div className="smallcard-inner">
                           <h2>{c.name}</h2>
                           <p>{c.desc}</p>
-                          <button>shop</button>
+                          <p>{c.price}INR</p>
+
+                          <div className="btn_cart_cover">
+                            <NavLink
+                              className="link"
+                              to={`/products/${c.id}`}
+                              exact
+                            >
+                              Shop
+                            </NavLink>
+
+                            <button
+                              className="button"
+                              onClick={() => addtocart(c.id)}
+                            >
+                              <span>Add To Cart </span>
+                            </button>
+                            {showStock(c.quant)}
+                          </div>
                         </div>
                       </div>
                     );
@@ -143,7 +196,25 @@ const FilterProducts = () => {
                       <div className="smallcard-inner">
                         <h2>{fp.name}</h2>
                         <p>{fp.desc}</p>
-                        <button>shop</button>
+                        <p>{fp.price}INR</p>
+
+                        <div className="btn_cart_cover">
+                          <NavLink
+                            className="link"
+                            to={`/products/${fp.id}`}
+                            exact
+                          >
+                            Shop
+                          </NavLink>
+
+                          <button
+                            className="button"
+                            onClick={() => addtocart(fp.id)}
+                          >
+                            <span>Add To Cart </span>
+                          </button>
+                          {showStock(fp.quant)}
+                        </div>
                       </div>
                     </div>
                   );
@@ -159,7 +230,26 @@ const FilterProducts = () => {
                       <div className="smallcard-inner">
                         <h2>{pp.name}</h2>
                         <p>{pp.desc}</p>
-                        <button>shop</button>
+                        <p>{pp.price}INR</p>
+
+                        <div className="btn_cart_cover">
+                          <NavLink
+                            className="link"
+                            to={`/products/${pp.id}`}
+                            exact
+                          >
+                            Shop
+                          </NavLink>
+
+                          <button
+                            className="button"
+                            onClick={() => addtocart(pp.id)}
+                          >
+                            Add To Cart
+                          </button>
+
+                          {showStock(pp.quant)}
+                        </div>
                       </div>
                     </div>
                   );
@@ -168,12 +258,13 @@ const FilterProducts = () => {
           </>
         </div>
       </div>
-
-      <div className="load-more">
-        <button onClick={loadMore} className="btn-grad">
-          {isloading ? "Loading..." : "Load More"}
-        </button>
-      </div>
+      {pro && (
+        <div className="load-more">
+          <button onClick={loadMore} className="btn-grad">
+            {isloading ? "Loading..." : "Load More"}
+          </button>
+        </div>
+      )}
     </>
   );
 };

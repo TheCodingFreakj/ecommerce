@@ -102,6 +102,60 @@ module.exports = class ProductController {
     }
   }
 
+  static async getaproduct(req, res, next) {
+    console.log(typeof Number(req.params.id));
+    try {
+      const product = await db.Products.findOne({
+        where: {
+          id: Number(req.params.id),
+        },
+      });
+
+      if (product) {
+        return res.status(200).send({
+          message: "produts retrieved ",
+          product: product,
+        });
+      } else {
+        return res.status(200).send({
+          message: "No product found",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .send("the request done is falsy..try again with right credentials");
+    }
+  }
+
+  static async getrelatedproduct(req, res, next) {
+    console.log(typeof Number(req.params.sold));
+    try {
+      const product = await db.Products.findOne({
+        where: {
+          sold: Number(req.params.sold),
+        },
+      });
+
+      if (product) {
+        return res.status(200).send({
+          message: "produts retrieved ",
+          product: product,
+        });
+      } else {
+        return res.status(200).send({
+          message: "No product found",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .send("the request done is falsy..try again with right credentials");
+    }
+  }
+
   static async update(req, res, next) {
     console.log(req.body);
     try {
@@ -191,9 +245,6 @@ module.exports = class ProductController {
         .send("the request done is falsy..try again with right credentials");
     }
   }
-
-  //getting the product in this price range
-  //ordered by sold
 
   //best sellers
   static async getProducts(req, res, next) {
@@ -346,40 +397,3 @@ module.exports = class ProductController {
 
 //find all orders belinging to a customer
 //https://maximorlov.com/6-common-sequelize-queries-rewritten-in-sql/
-// console.log("this is semd frp, fromyemnd", req.body.newFilters[key]);
-// if (req.body.newFilters[key].length > 0) {
-//   if (key === "price") {
-//     findArgs = {
-//       lowerlimit: req.body.newFilters[key][0],
-//       upperlimit: req.body.newFilters[key][1],
-//     };
-//   }
-// } else {
-//   if (key === "category") {
-//     findArgs.category = req.body.newFilters[key];
-//   }
-// }
-
-// console.log(findArgs);
-
-// let limitget = ([Op.between] = [
-//   findArgs.lowerlimit,
-//   findArgs.upperlimit,
-// ]);
-
-// console.log(limitget);
-
-// const theProds = await db.Products.findAll({
-//   where: {
-//     price: limitget,
-//   },
-
-//   // order: [["sold", "desc"]],
-//   // limit: limit,
-// });
-
-// console.log(theProds);
-// return res.status(200).send({
-//   message: "produts retrieved ",
-//   theProds: theProds,
-// });

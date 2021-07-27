@@ -7,13 +7,15 @@ const router = express.Router();
 
 router.post("/createProduct", tokenAuth, ProductController.create);
 router.get("/getallp", ProductController.getallproducts);
+router.get("/getproduct/:id", ProductController.getaproduct);
+router.get("/getrelated/:sold", ProductController.getrelatedproduct);
 router.post("/viewproduct/:prod_id", tokenAuth, ProductController.viewproduct);
 router.put("/update/:prod_id", tokenAuth, ProductController.update); //if not token then cant login
 router.delete("/deleteproduct/:id", tokenAuth, ProductController.deletepro);
 
 //product search
 router.get("/getproducts", ProductController.getProducts);
-router.get("/newarrivals",  ProductController.newarrivals);
+router.get("/newarrivals", ProductController.newarrivals);
 router.post("/listBySearch", ProductController.listBySearch);
 
 router.post("/addtocart", tokenAuth, ProductController.addtocart);

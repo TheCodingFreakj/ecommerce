@@ -18,8 +18,18 @@ img.image {
 
 .smallcard {
   height: 20rem;
+  margin-bottom: 7%;
 }
 
+.btn_cart_cover {
+  background: repeating-linear-gradient(
+    45deg,
+    rgb(54, 19, 19),
+    transparent 100px
+  );
+  padding: 4%;
+  color: #fff;
+}
 .left-side {
   background: rgb(57, 63, 45);
   color: aliceblue;
@@ -34,4 +44,90 @@ img.image {
   display: flex;
   flex-wrap: wrap;
   width: 80%;
+}
+.main_single_product {
+  margin-top: 4%;
+  background: rgb(66, 30, 30);
+  color: aliceblue;
+  display: flex;
+}
+
+.single_product img {
+  /* width: 30rem; */
+  position: relative;
+  left: 50%;
+}
+
+.single_product h3 {
+  /* width: 30rem; */
+  position: relative;
+  left: 50%;
+}
+.single_product p {
+  /* width: 30rem; */
+  position: relative;
+  left: 50%;
+}
+
+.btn_cart {
+  border-radius: 4px;
+  background-color: #f4511e;
+  border: none;
+  color: #ffffff;
+  text-align: center;
+  font-size: 19px;
+  padding: 20px;
+  width: 200px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+  position: relative;
+  left: 50%;
+}
+
+.btn_cart span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.btn_cart span:after {
+  content: "\00bb";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.btn_cart:hover span {
+  padding-right: 25px;
+}
+
+.btn_cart:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+.link {
+  color: #fff;
+  font-weight: 600;
+}
+.btn_cart_cover {
+  display: flex;
+  justify-content: space-between;
+}
+.button {
+  background: rgb(63, 34, 63);
+  width: 10rem;
+  color: #fff;
+  font-weight: 600;
+  padding: 3%;
+}
+
+span.badge.badge-primary.badge-pill {
+  color: #fff;
+  font-weight: 600;
+  padding: 3%;
 }
