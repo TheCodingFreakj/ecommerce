@@ -131,3 +131,23 @@ span.badge.badge-primary.badge-pill {
   font-weight: 600;
   padding: 3%;
 }
+
+.class_cart {
+  margin-top: 9%;
+}
+
+.class_cart-inners {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column-reverse;
+  text-align: left;
+}
+
+.cart_items {
+  display: flex;
+  justify-content: space-around;
+}
+.dic_inner {
+  position: relative;
+  left: 4%;
+}

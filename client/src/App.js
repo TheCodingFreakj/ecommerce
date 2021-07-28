@@ -14,6 +14,7 @@ import CreateCategory from "./components/Category/CreateCategory";
 import ShowProducts from "./components/Products/ShowProducts";
 import FilterProducts from "./components/Shop-Page/product";
 import SingleProduct from "./components/Shop-Page/single-product";
+import Cart from "./components/Shop-Page/Cart"
 
 const App = () => {
   return (
@@ -49,6 +50,11 @@ const App = () => {
 
             <Route path="/products" exact>
               <FilterProducts />
+            </Route>
+
+            
+            <Route path="/cart" exact>
+              <Cart />
             </Route>
 
             <PrivateAdminRoute

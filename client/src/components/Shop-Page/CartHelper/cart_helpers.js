@@ -38,4 +38,7 @@ export const addItem = (product, quant) => {
   }
 };
 
+
+//https://github.com/kaloraat/ecommerce
+//https://github.com/kaloraat/ecommerce-front
 //https://stackoverflow.com/questions/55366389/prevent-duplicate-products-to-be-removed-from-cart

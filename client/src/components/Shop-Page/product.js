@@ -18,6 +18,14 @@ const FilterProducts = () => {
   const [myfilters, setmyfilters] = React.useState({
     filters: { category: [], price: [] },
   });
+  const [filtereditems, setfiltereditems] = React.useState({
+    cart: "",
+  });
+
+  const [cartprice, setcartprice] = React.useState({
+    cart: "",
+  });
+
   const [cartitems, setcartitems] = React.useState({
     cart: "",
   });
@@ -109,10 +117,13 @@ const FilterProducts = () => {
 
   const addtocart = (id) => {
     let product = Object.assign({}, pro ? pro.find((p) => p.id == id) : null);
+
     product.cartId = Date.now();
 
     setcartitems((prevState) => {
-      return { cart: [...prevState.cart, product] };
+      return {
+        cart: [...prevState.cart, product],
+      };
     });
 
     let uniqueArray = cartitems.cart
@@ -122,11 +133,72 @@ const FilterProducts = () => {
         )
       : null;
 
+    console.log("uniqueArray", uniqueArray);
     if (typeof window !== "undefined") {
       localStorage.setItem("cart", JSON.stringify(uniqueArray));
     }
   };
 
+  const addtocartfilteredp = (id) => {
+    let filteredproductp = Object.assign(
+      {},
+      filteredresultsp ? filteredresultsp.find((p) => p.id == id) : null
+    );
+
+    filteredproductp.cartId = Date.now();
+
+    setcartprice((prevState) => {
+      return {
+        cart: [...prevState.cart, filteredproductp],
+      };
+    });
+
+    let uniqueArray4 = cartprice.cart
+      ? cartprice.cart.filter(
+          (elem, index) =>
+            cartprice.cart.findIndex((obj) => obj.id === elem.id) === index
+        )
+      : null;
+
+    console.log("uniqueArray4", uniqueArray4);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cartprice", JSON.stringify(uniqueArray4));
+    }
+  };
+
+  const addtocartfiltered = (id) => {
+    const filteredproduct = filteredresults
+      ? filteredresults.map((p) => {
+          return p.Products.find((pr) => pr.id == id);
+        })
+      : null;
+
+    // console.log(filteredproduct);
+
+    setfiltereditems((prevState) => {
+      return {
+        cart: [...prevState.cart, filteredproduct],
+      };
+    });
+
+    console.log(filtereditems);
+
+    let uniqueArray2 = filtereditems.cart
+      ? filtereditems.cart[0].filter(
+          (elem, index) =>
+            filtereditems.cart[0].findIndex((obj) => obj.id === elem.id) ===
+            index
+        )
+      : null;
+
+    console.log("uniqueArray2", uniqueArray2);
+    if (typeof window !== "undefined") {
+      localStorage.setItem(
+        "filtereditems",
+        JSON.stringify(filtereditems.cart)
+      );
+    }
+  };
   return (
     <>
       <div className="product_content">
@@ -152,7 +224,6 @@ const FilterProducts = () => {
           <>
             {filteredresults
               ? filteredresults.map((f) => {
-                  console.log(f);
                   return f.Products.map((c) => {
                     return (
                       <div className="smallcard">
@@ -174,7 +245,7 @@ const FilterProducts = () => {
 
                             <button
                               className="button"
-                              onClick={() => addtocart(c.id)}
+                              onClick={() => addtocartfiltered(c.id)}
                             >
                               <span>Add To Cart </span>
                             </button>
@@ -209,7 +280,7 @@ const FilterProducts = () => {
 
                           <button
                             className="button"
-                            onClick={() => addtocart(fp.id)}
+                            onClick={() => addtocartfilteredp(fp.id)}
                           >
                             <span>Add To Cart </span>
                           </button>

@@ -46,6 +46,10 @@ const Navlinks = () => {
         <NavLink to="/products" exact>
           Products
         </NavLink>
+
+        <NavLink to="/cart" exact>
+          cart
+        </NavLink>
         {stateadmin ? (
           <NavLink to="/admin-register">register Admin</NavLink>
         ) : null}
