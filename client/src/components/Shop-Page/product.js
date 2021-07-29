@@ -19,15 +19,15 @@ const FilterProducts = () => {
     filters: { category: [], price: [] },
   });
   const [filtereditems, setfiltereditems] = React.useState({
-    cart: "",
+    cart: [],
   });
 
   const [cartprice, setcartprice] = React.useState({
-    cart: "",
+    cart: [],
   });
 
   const [cartitems, setcartitems] = React.useState({
-    cart: "",
+    cart: [],
   });
   const [redirect, setRedirect] = React.useState(false);
   React.useEffect(() => {
@@ -116,26 +116,15 @@ const FilterProducts = () => {
   };
 
   const addtocart = (id) => {
+    console.log(id);
     let product = Object.assign({}, pro ? pro.find((p) => p.id == id) : null);
-
     product.cartId = Date.now();
+    setcartitems({ cart: [...cartitems.cart, product] }, () =>
+      console.log(cartitems.cart)
+    );
 
-    setcartitems((prevState) => {
-      return {
-        cart: [...prevState.cart, product],
-      };
-    });
-
-    let uniqueArray = cartitems.cart
-      ? cartitems.cart.filter(
-          (elem, index) =>
-            cartitems.cart.findIndex((obj) => obj.id === elem.id) === index
-        )
-      : null;
-
-    console.log("uniqueArray", uniqueArray);
     if (typeof window !== "undefined") {
-      localStorage.setItem("cart", JSON.stringify(uniqueArray));
+      localStorage.setItem("cart", JSON.stringify(cartitems.cart));
     }
   };
 
@@ -153,16 +142,8 @@ const FilterProducts = () => {
       };
     });
 
-    let uniqueArray4 = cartprice.cart
-      ? cartprice.cart.filter(
-          (elem, index) =>
-            cartprice.cart.findIndex((obj) => obj.id === elem.id) === index
-        )
-      : null;
-
-    console.log("uniqueArray4", uniqueArray4);
     if (typeof window !== "undefined") {
-      localStorage.setItem("cartprice", JSON.stringify(uniqueArray4));
+      localStorage.setItem("cartprice", JSON.stringify(cartprice.cart));
     }
   };
 
@@ -181,22 +162,8 @@ const FilterProducts = () => {
       };
     });
 
-    console.log(filtereditems);
-
-    let uniqueArray2 = filtereditems.cart
-      ? filtereditems.cart[0].filter(
-          (elem, index) =>
-            filtereditems.cart[0].findIndex((obj) => obj.id === elem.id) ===
-            index
-        )
-      : null;
-
-    console.log("uniqueArray2", uniqueArray2);
     if (typeof window !== "undefined") {
-      localStorage.setItem(
-        "filtereditems",
-        JSON.stringify(filtereditems.cart)
-      );
+      localStorage.setItem("filtereditems", JSON.stringify(filtereditems.cart));
     }
   };
   return (
@@ -341,3 +308,4 @@ const FilterProducts = () => {
 };
 
 export default FilterProducts;
+//https://blog.logrocket.com/returning-null-from-setstate-in-react-16-5fdb1c35d457/
