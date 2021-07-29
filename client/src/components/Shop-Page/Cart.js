@@ -1,27 +1,15 @@
 import React from "react";
 import "./style.css";
+import { useSelector } from "react-redux";
+import { cartSelector } from "../../store/cart";
 const Cart = () => {
-  let firstArray = [];
+  const productsselected = useSelector(cartSelector).items;
+  console.log(productsselected);
+
   let showitems = "";
-  let filtereditems = [];
-  const [items, setitems] = React.useState("");
-  React.useEffect(() => {
-    let cart = JSON.parse(localStorage.getItem("cart"));
-    let cartprice = JSON.parse(localStorage.getItem("cartprice"));
-    filtereditems = JSON.parse(localStorage.getItem("filtereditems"));
 
-    if (filtereditems) {
-      return filtereditems.map((items) => {
-        firstArray = [...cart, ...cartprice, ...items];
-        setitems(firstArray);
-        console.log(firstArray);
-      });
-    }
-  }, []);
-  console.log(items);
-
-  showitems = items ? (
-    items.map((arr) => {
+  showitems = productsselected ? (
+    productsselected.map((arr) => {
       console.log(arr);
       return (
         <>
@@ -71,3 +59,6 @@ const Cart = () => {
 };
 
 export default Cart;
+
+//to remove
+//https://dev.to/papasanto/build-a-react-hooks-shopping-cart-with-usestate-and-useeffect-39hk

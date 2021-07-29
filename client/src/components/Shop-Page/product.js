@@ -5,8 +5,11 @@ import axios from "axios";
 import RadioBox from "./radiobox";
 import { prices } from "./prices";
 import { NavLink, Redirect } from "react-router-dom";
-import { addItem } from "./CartHelper/cart_helpers";
+import { useDispatch, useSelector } from "react-redux";
+import { addToBasket, cartSelector } from "../../store/cart";
 const FilterProducts = () => {
+  const productsselected = useSelector(cartSelector).items;
+  console.log(productsselected);
   const [cat, setcat] = React.useState("");
   const [pro, setpro] = React.useState("");
   const [limit, setlimit] = React.useState(3);
@@ -18,18 +21,8 @@ const FilterProducts = () => {
   const [myfilters, setmyfilters] = React.useState({
     filters: { category: [], price: [] },
   });
-  const [filtereditems, setfiltereditems] = React.useState({
-    cart: [],
-  });
 
-  const [cartprice, setcartprice] = React.useState({
-    cart: [],
-  });
-
-  const [cartitems, setcartitems] = React.useState({
-    cart: [],
-  });
-  const [redirect, setRedirect] = React.useState(false);
+  const cartdispatch = useDispatch();
   React.useEffect(() => {
     const showall = async () => {
       const response = axios({
@@ -104,9 +97,7 @@ const FilterProducts = () => {
     setpage(page + 1);
     showallP();
   };
-  // console.log("pro", pro);
-  // console.log("filteredresults", filteredresults);
-  // console.log("filteredresultsp", filteredresultsp);
+
   const showStock = (quantity) => {
     return quantity > 0 ? (
       <span className="badge badge-primary badge-pill">In Stock </span>
@@ -115,57 +106,6 @@ const FilterProducts = () => {
     );
   };
 
-  const addtocart = (id) => {
-    console.log(id);
-    let product = Object.assign({}, pro ? pro.find((p) => p.id == id) : null);
-    product.cartId = Date.now();
-    setcartitems({ cart: [...cartitems.cart, product] }, () =>
-      console.log(cartitems.cart)
-    );
-
-    if (typeof window !== "undefined") {
-      localStorage.setItem("cart", JSON.stringify(cartitems.cart));
-    }
-  };
-
-  const addtocartfilteredp = (id) => {
-    let filteredproductp = Object.assign(
-      {},
-      filteredresultsp ? filteredresultsp.find((p) => p.id == id) : null
-    );
-
-    filteredproductp.cartId = Date.now();
-
-    setcartprice((prevState) => {
-      return {
-        cart: [...prevState.cart, filteredproductp],
-      };
-    });
-
-    if (typeof window !== "undefined") {
-      localStorage.setItem("cartprice", JSON.stringify(cartprice.cart));
-    }
-  };
-
-  const addtocartfiltered = (id) => {
-    const filteredproduct = filteredresults
-      ? filteredresults.map((p) => {
-          return p.Products.find((pr) => pr.id == id);
-        })
-      : null;
-
-    // console.log(filteredproduct);
-
-    setfiltereditems((prevState) => {
-      return {
-        cart: [...prevState.cart, filteredproduct],
-      };
-    });
-
-    if (typeof window !== "undefined") {
-      localStorage.setItem("filtereditems", JSON.stringify(filtereditems.cart));
-    }
-  };
   return (
     <>
       <div className="product_content">
@@ -212,7 +152,7 @@ const FilterProducts = () => {
 
                             <button
                               className="button"
-                              onClick={() => addtocartfiltered(c.id)}
+                              onClick={() => cartdispatch(addToBasket(c))}
                             >
                               <span>Add To Cart </span>
                             </button>
@@ -247,7 +187,7 @@ const FilterProducts = () => {
 
                           <button
                             className="button"
-                            onClick={() => addtocartfilteredp(fp.id)}
+                            onClick={() => cartdispatch(addToBasket(fp))}
                           >
                             <span>Add To Cart </span>
                           </button>
@@ -281,7 +221,7 @@ const FilterProducts = () => {
 
                           <button
                             className="button"
-                            onClick={() => addtocart(pp.id)}
+                            onClick={() => cartdispatch(addToBasket(pp))}
                           >
                             Add To Cart
                           </button>
@@ -309,3 +249,4 @@ const FilterProducts = () => {
 
 export default FilterProducts;
 //https://blog.logrocket.com/returning-null-from-setstate-in-react-16-5fdb1c35d457/
+//https://egghead.io/lessons/react-adding-a-button-that-dispatches-an-action-to-redux-to-remove-an-item-from-the-shoppingcart?utm_source=rss&utm_medium=feed&utm_campaign=rss_feed
