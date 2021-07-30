@@ -150,4 +150,26 @@ span.badge.badge-primary.badge-pill {
 .dic_inner {
   position: relative;
   left: 4%;
+  font-weight: 600;
+}
+
+.cart_items_infor p {
+  position: relative;
+  left: 5%;
+  font-weight: 600;
+}
+
+button.btn {
+  background: violet;
+}
+
+span {
+  /* margin: 10%; */
+  margin: 0 6%;
+  background: steelblue;
+}
+select#quant {
+  position: relative;
+  /* left: 4%; */
+  left: 8%;
 }

@@ -127,7 +127,6 @@ const FilterProducts = () => {
           </div>
         </div>
         <div className="right-side">
-          {/* {shouldRedirect(redirect)} */}
           <>
             {filteredresults
               ? filteredresults.map((f) => {

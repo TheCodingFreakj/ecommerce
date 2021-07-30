@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   User.beforeCreate(async (user, options) => {
-    // console.log("users before create", user);
+    //console.log("users before create", user);
 
     return await bcrypt
       .hash(user.password, 10)

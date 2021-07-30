@@ -23,12 +23,18 @@ export const cartSlice = createSlice({
         state.items.push(payload);
       }
     },
+
+    removeitem: (state, { payload }) => {
+      console.log(payload);
+      state.items = state.items.filter((item) => item.id !== payload.id);
+    },
   },
 
   extraReducers: {},
 });
 
-export const { addToBasket } = cartSlice.actions;
+export const { addToBasket, removeitem } = cartSlice.actions;
 
 export const cartSelector = (state) => state.cart;
 //https://stackoverflow.com/questions/65931557/react-redux-update-item-quantity-more-than-just-one-increment
+//https://webmobtuts.com/frontend-development/building-shopping-cart-with-reactjs-and-redux-part-2/

@@ -103,17 +103,18 @@ module.exports = class UserController {
         });
       }
 
-      const oldUser = await await db.Users.findOne({
+      const oldUser = await db.Users.findOne({
         attributes: ["id", "email", "username", "password", "role"],
         where: { email: req.body.email },
       });
 
       console.log(oldUser);
-      const isValid = "";
       const passwordfrontend = req.body.password;
       const oldPassword = oldUser.password;
-
+      // console.log(passwordfrontend);
+      // console.log(oldPassword);
       await bcrypt.compareSync(passwordfrontend, oldPassword);
+      //console.log(bcrypt.compareSync(passwordfrontend, oldPassword));
       if (!(await bcrypt.compareSync(passwordfrontend, oldPassword))) {
         return res.status(400).json({
           message: "passwords dont match",
