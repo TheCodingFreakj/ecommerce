@@ -4,23 +4,45 @@ import "./style.css";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { removeitem, addToBasket, cartSelector } from "../../store/cart";
+
+var yourGlobalVariable = [];
 const Cart = () => {
   const removeitemdispatch = useDispatch();
-  const updatedispatch = useDispatch();
   const productsselected = useSelector(cartSelector).items;
-  console.log(productsselected);
-  // React.useState(() => {});
+  const [storeval, setstoreval] = React.useState([]);
+  let updated = [];
+  // var yourGlobalVariable;
 
-  const handleChange = (e) => {
-    console.log(e.target.value);
+  const handleChange = (e, arr) => {
+    let quant = e.target.value;
+    arr.quant = quant;
+    updated.splice(updated.length - 1, 0, arr);
+    console.log(updated);
+
+    let upadetdquanp = updated.map((ind) => {
+      let updatedpricecal = ind.quant * ind.price;
+      return updatedpricecal;
+    });
+
+    yourGlobalVariable = removeduplicates(upadetdquanp).reduce(
+      (total, amount) => total + amount
+    );
+    console.log(yourGlobalVariable);
   };
+
+  const removeduplicates = (arr) => {
+    return arr.filter((value, index) => arr.indexOf(value) === index);
+  };
+
+  console.log(yourGlobalVariable);
+
   let showitems = "";
 
   showitems = productsselected ? (
     productsselected.map((arr) => {
       return (
         <>
-          <div className="cart_items">
+          <div className="cart_items" key={arr.id}>
             <h3>{arr.name}</h3>
 
             <div className="cart_items_infor">
@@ -29,14 +51,11 @@ const Cart = () => {
                 <select
                   name="quant"
                   id="quant"
-                  onChange={(e) => handleChange(e)}
+                  onChange={(e) => handleChange(e, arr)}
                 >
-                  <option name="1" value="1">
-                    1
-                  </option>
-                  <option name="2" value="2">
-                    2
-                  </option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
                   <option value="3">3</option>
                   <option value="4">4</option>
                   <option value="5">5</option>

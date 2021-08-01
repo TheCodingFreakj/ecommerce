@@ -7,17 +7,18 @@ export const cartSlice = createSlice({
   },
   reducers: {
     addToBasket: (state, { payload }) => {
-      console.log(payload);
+      console.log("payload", payload);
       const item = state.items.find((product) => product.id === payload.id);
-
+    
       if (item) {
         state = state.items.map((product) =>
-          product.id === payload.id
-            ? {
-                ...product,
-                quantity: product.quant + payload.quant,
-              }
-            : product
+        console.log(product)
+          // product.id === payload.id
+          //   ? {
+          //       ...product,
+          //       quant: product.quant + payload.quant,
+          //     }
+          //   : product
         );
       } else {
         state.items.push(payload);
