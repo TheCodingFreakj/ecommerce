@@ -196,3 +196,25 @@ select#quant {
   font-size: 1.9rem;
   align-items: flex-start;
 }
+
+.link_checkout {
+  background: yellowgreen;
+  position: relative;
+}
+.link_checkout a {
+  background: rgb(61, 70, 45);
+  color: #fff;
+  padding: 2%;
+  position: absolute;
+  left: 80%;
+  bottom: 3rem;
+}
+button.button_checkout {
+  background: yellowgreen;
+  position: relative;
+  left: 80%;
+  /* bottom: 6rem; */
+  bottom: 7rem;
+  padding: 3%;
+  /* bottom: 3rem; */
+}

@@ -5,16 +5,18 @@ import { useSelector } from "react-redux";
 
 import { customerSelector } from "../../store/customer";
 const PrivateCustomerRoute = ({ component: Component, ...rest }) => {
-  const { token } = useSelector(customerSelector);
-  console.log(token);
+
+
+  let statecustomer = useSelector(customerSelector).token;
+  console.log(statecustomer);
   return (
     <Route
       {...rest}
       render={(props) =>
-        token ? (
+        statecustomer ? (
           <Component {...props} />
         ) : (
-          <Redirect to={{ pathname: "/", state: { from: props.location } }} />
+          <Redirect to={{ pathname: "/login-customer", state: { from: props.location } }} />
         )
       }
     />
@@ -22,3 +24,6 @@ const PrivateCustomerRoute = ({ component: Component, ...rest }) => {
 };
 
 export default PrivateCustomerRoute;
+
+
+

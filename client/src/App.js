@@ -7,14 +7,16 @@ import AdminSign from "./components/AdminSign/AdminSign";
 import CustomerLogin from "./components/CustomerLogin/CustomerLogin";
 import AdminLogin from "./components/AdminLogin/AdminLogin";
 import DashBoard from "./components/Dashboard/dashboard";
+import CustomerDashboard from "./components/customerdashboard/CustomerDashboard";
 import PrivateAdminRoute from "./components/utils/privateAdminRoute";
+import PrivateCustomerRoute from "./components/utils/privateCustomerRoute";
 import CreateProduct from "./components/Products/CreateProduct";
 import UpdateProduct from "./components/Products/UpdateProduct";
 import CreateCategory from "./components/Category/CreateCategory";
 import ShowProducts from "./components/Products/ShowProducts";
 import FilterProducts from "./components/Shop-Page/product";
 import SingleProduct from "./components/Shop-Page/single-product";
-import Cart from "./components/Shop-Page/Cart"
+import Cart from "./components/Shop-Page/Cart";
 
 const App = () => {
   return (
@@ -52,7 +54,6 @@ const App = () => {
               <FilterProducts />
             </Route>
 
-            
             <Route path="/cart" exact>
               <Cart />
             </Route>
@@ -62,6 +63,12 @@ const App = () => {
               component={DashBoard}
               exact
             ></PrivateAdminRoute>
+
+            <PrivateCustomerRoute
+              path="/customerdashboard"
+              component={CustomerDashboard}
+              exact
+            ></PrivateCustomerRoute>
 
             <PrivateAdminRoute
               path="/dashboard/create_p"

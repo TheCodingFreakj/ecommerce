@@ -4,15 +4,23 @@ import "./style.css";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { removeitem, updateCart, cartSelector } from "../../store/cart";
-
+import { customerSelector } from "../../store/customer";
+import DropIn from "braintree-web-drop-in-react";
+import axios from "axios";
 const Cart = () => {
   const [total, settotal] = React.useState(0);
+  const [paymentdata, setpaymentdata] = React.useState({
+    success: false,
+    clientToken: null,
+    error: "",
+    instance: {},
+    address: "",
+  });
+  const customertoken = useSelector(customerSelector).token;
+  const customer = useSelector(customerSelector).user;
   const removeitemdispatch = useDispatch();
   const updatequamdispatch = useDispatch();
   const productsselected = useSelector(cartSelector).items;
-
-  console.log(productsselected);
-
   const handleChange = (e, arr) => {
     let quant = e.target.value;
     updatequamdispatch(updateCart({ arr, quant }));
@@ -90,6 +98,39 @@ const Cart = () => {
     </NavLink>
   );
 
+  const handleCheckout = async () => {
+    const response = await axios({
+      method: "get",
+      url: `http://localhost:8080/api/v1/braintree/getToken/${customer.id}`,
+      headers: {
+        contentType: "application/json",
+        authorization: ` Bearer ${customertoken}`,
+      },
+    });
+
+    setpaymentdata({ ...paymentdata, clientToken: response.data.clientToken });
+  };
+
+  React.useEffect(() => {
+    handleCheckout();
+  });
+
+  const showDropin = () => (
+    <div>
+      {paymentdata.clientToken !== null && productsselected.length > 0 ? (
+        <div>
+          <button className="button_checkout">checkout</button>
+          <DropIn
+            options={{
+              authorization: paymentdata.clientToken,
+            }}
+            onInstance={(instance) => (paymentdata.instance = instance)}
+          />
+        </div>
+      ) : null}
+    </div>
+  );
+
   return (
     <React.Fragment>
       <div className="class_cart">
@@ -102,6 +143,22 @@ const Cart = () => {
                 <h1>Subtotal</h1>
                 <h3>{total}</h3>
               </div>
+
+              {customertoken ? (
+                <>
+                  {/* <button className="button_checkout" onClick={handleCheckout}>
+                    checkout
+                  </button> */}
+
+                  <div>{showDropin()}</div>
+                </>
+              ) : (
+                <div className="link_checkout">
+                  <NavLink to={`/login-customer`} exact>
+                    Login
+                  </NavLink>
+                </div>
+              )}
             </div>
           ) : (
             <NavLink className="link" to={`/product`} exact>

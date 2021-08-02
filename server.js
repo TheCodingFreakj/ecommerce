@@ -6,6 +6,7 @@ const db = require("./models/index");
 const userRoute = require("./server/routes/userRoute");
 const categoryRoute = require("./server/routes/categoryRoute");
 const productsRoute = require("./server/routes/productsRoute");
+const paymentsRoute = require("./server/routes/braintree");
 db.sequelize.sync();
 //import the route and initialize
 const app = express();
@@ -37,6 +38,7 @@ app.use(
 app.use("/api/v1", userRoute);
 app.use("/api/v1", categoryRoute);
 app.use("/api/v1", productsRoute);
+app.use("/api/v1", paymentsRoute);
 app.get("/", (req, res) => {
   res.json({ message: `Welcome to my application.${process.env.PORT}` });
 });

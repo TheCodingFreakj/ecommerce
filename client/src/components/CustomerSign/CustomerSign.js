@@ -32,7 +32,7 @@ const CustomerSign = () => {
 
       console.log(originalPromiseResult2);
       let { from } = location.state || {
-        from: { pathname: "/dashboard" },
+        from: { pathname: "/customerdashboard" },
       };
 
       history.replace(from);

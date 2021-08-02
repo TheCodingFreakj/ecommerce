@@ -32,7 +32,7 @@ const CustomerLogin = () => {
       console.log(originalPromiseResult);
 
       let { from } = location.state || {
-        from: { pathname: "/customerdashboard" },
+        from: { pathname: "/cart" },
       };
 
       history.replace(from);
