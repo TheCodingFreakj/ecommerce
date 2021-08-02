@@ -7,22 +7,13 @@ export const cartSlice = createSlice({
   },
   reducers: {
     addToBasket: (state, { payload }) => {
-      console.log("payload", payload);
-      const item = state.items.find((product) => product.id === payload.id);
-    
-      if (item) {
-        state = state.items.map((product) =>
-        console.log(product)
-          // product.id === payload.id
-          //   ? {
-          //       ...product,
-          //       quant: product.quant + payload.quant,
-          //     }
-          //   : product
-        );
-      } else {
-        state.items.push(payload);
-      }
+      state.items.push(payload);
+    },
+
+    updateCart: (state, { payload }) => {
+      // console.log(payload);
+      let item = state.items.find((item) => item.id == payload.arr.id);
+      item.quant = payload.quant;
     },
 
     removeitem: (state, { payload }) => {
@@ -34,7 +25,7 @@ export const cartSlice = createSlice({
   extraReducers: {},
 });
 
-export const { addToBasket, removeitem } = cartSlice.actions;
+export const { addToBasket, removeitem, updateCart } = cartSlice.actions;
 
 export const cartSelector = (state) => state.cart;
 //https://stackoverflow.com/questions/65931557/react-redux-update-item-quantity-more-than-just-one-increment

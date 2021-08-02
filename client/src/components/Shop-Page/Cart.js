@@ -3,38 +3,34 @@ import "./style.css";
 
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { removeitem, addToBasket, cartSelector } from "../../store/cart";
+import { removeitem, updateCart, cartSelector } from "../../store/cart";
 
-var yourGlobalVariable = [];
 const Cart = () => {
+  const [total, settotal] = React.useState(0);
   const removeitemdispatch = useDispatch();
+  const updatequamdispatch = useDispatch();
   const productsselected = useSelector(cartSelector).items;
-  const [storeval, setstoreval] = React.useState([]);
-  let updated = [];
-  // var yourGlobalVariable;
+
+  console.log(productsselected);
 
   const handleChange = (e, arr) => {
     let quant = e.target.value;
-    arr.quant = quant;
-    updated.splice(updated.length - 1, 0, arr);
-    console.log(updated);
+    updatequamdispatch(updateCart({ arr, quant }));
+    let quantityarr = [];
+    let sum = "";
+    const tquantity = productsselected
+      ? productsselected.map((singleproduct) => {
+          console.log(singleproduct.quant);
+          let price = Number(singleproduct.quant) * Number(singleproduct.price);
+          quantityarr.push(Number(price));
+          sum = quantityarr.reduce(function (accumulator, current) {
+            return accumulator + current;
+          });
 
-    let upadetdquanp = updated.map((ind) => {
-      let updatedpricecal = ind.quant * ind.price;
-      return updatedpricecal;
-    });
-
-    yourGlobalVariable = removeduplicates(upadetdquanp).reduce(
-      (total, amount) => total + amount
-    );
-    console.log(yourGlobalVariable);
+          settotal(sum);
+        })
+      : null;
   };
-
-  const removeduplicates = (arr) => {
-    return arr.filter((value, index) => arr.indexOf(value) === index);
-  };
-
-  console.log(yourGlobalVariable);
 
   let showitems = "";
 
@@ -42,12 +38,12 @@ const Cart = () => {
     productsselected.map((arr) => {
       return (
         <>
-          <div className="cart_items" key={arr.id}>
+          <div className="cart_items">
             <h3>{arr.name}</h3>
 
             <div className="cart_items_infor">
-              <div className="dic_inner">
-                avalaible: {arr.quant}
+              <div className="dic_inner" key={arr.id}>
+                {/* avalaible: {arr.quant} */}
                 <select
                   name="quant"
                   id="quant"
@@ -102,7 +98,10 @@ const Cart = () => {
           {productsselected ? (
             <div>
               {showitems}
-              <div className="footer_cart">Subtotal</div>
+              <div className="footer_cart">
+                <h1>Subtotal</h1>
+                <h3>{total}</h3>
+              </div>
             </div>
           ) : (
             <NavLink className="link" to={`/product`} exact>
@@ -119,3 +118,19 @@ export default Cart;
 
 //to remove
 //https://dev.to/papasanto/build-a-react-hooks-shopping-cart-with-usestate-and-useeffect-39hk
+
+// arr.quant = quant;
+// console.log(arr);
+// updated.splice(updated.length - 1, 0, arr);
+// console.log(updated);
+
+// let upadetdquanp = updated.map((ind) => {
+//   let updatedpricecal = ind.quant * ind.price;
+//   return updatedpricecal;
+// });
+
+// yourGlobalVariable = removeduplicates(upadetdquanp).reduce(
+//   (total, amount) => total + amount
+// );
+// console.log(yourGlobalVariable);
+// setstoreval(yourGlobalVariable);
