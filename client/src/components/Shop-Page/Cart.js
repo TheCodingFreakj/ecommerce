@@ -16,6 +16,8 @@ const Cart = () => {
     instance: {},
     address: "",
   });
+
+  const [Error, setError] = React.useState();
   const customertoken = useSelector(customerSelector).token;
   const customer = useSelector(customerSelector).user;
   const removeitemdispatch = useDispatch();
@@ -115,11 +117,42 @@ const Cart = () => {
     handleCheckout();
   });
 
+  const buy = () => {
+    //send the nonce to server
+    let nonce;
+    let getnonce = paymentdata.instance
+      .requestPaymentMethod()
+      .then((data) => {
+        nonce = data.nonce;
+        const paymentdatasent = {
+          paymentMethodNonce: nonce,
+          amounfromclient: total,
+        };
+        const response = axios({
+          method: "post",
+          url: `http://localhost:8080/api/v1/braintree/payment/${customer.id}`,
+          paymentdatasent,
+          headers: {
+            contentType: "application/json",
+            authorization: ` Bearer ${customertoken}`,
+          },
+        })
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => {
+        console.log(err);
+        setError(err.message);
+      });
+  };
+
   const showDropin = () => (
     <div>
       {paymentdata.clientToken !== null && productsselected.length > 0 ? (
-        <div>
-          <button className="button_checkout">checkout</button>
+        <div onBlur={() => setError("")}>
+          <button className="button_checkout" onClick={buy}>
+            checkout
+          </button>
           <DropIn
             options={{
               authorization: paymentdata.clientToken,
@@ -138,6 +171,7 @@ const Cart = () => {
         <div className="class_cart-inners">
           {productsselected ? (
             <div>
+              {Error ? <h3>{Error}</h3> : null}
               {showitems}
               <div className="footer_cart">
                 <h1>Subtotal</h1>
@@ -146,10 +180,6 @@ const Cart = () => {
 
               {customertoken ? (
                 <>
-                  {/* <button className="button_checkout" onClick={handleCheckout}>
-                    checkout
-                  </button> */}
-
                   <div>{showDropin()}</div>
                 </>
               ) : (
